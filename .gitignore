@@ -1,2 +1,6 @@
-visuell-intelligens/
+# Python miljø
+.visuell-intelligens/
 .venv/
+
+# IDUN
+*.out
