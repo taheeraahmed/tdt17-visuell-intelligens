@@ -1,5 +1,5 @@
 numpy
 nibabel
 matplotlib
-pytorch 
+torch 
 pandas
