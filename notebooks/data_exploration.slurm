@@ -6,7 +6,7 @@
 #SBATCH --ntasks-per-node=1
 #SBATCH --mem=4G
 #SBATCH --job-name="data_exploration"
-#SBATCH --output=data_exploration.out
+#SBATCH --output=idun/data_exploration.out
 #SBATCH --gres=gpu:1
 
 module load Anaconda3/2022.05

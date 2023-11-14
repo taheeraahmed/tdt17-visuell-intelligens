@@ -6,7 +6,7 @@
 #SBATCH --ntasks-per-node=1
 #SBATCH --mem=4G
 #SBATCH --job-name="spleen segmentation"
-#SBATCH --output=idun/data_exploration.out
+#SBATCH --output=idun/spleen-segmentation.out
 #SBATCH --gres=gpu:1
 
 module load Anaconda3/2022.05
