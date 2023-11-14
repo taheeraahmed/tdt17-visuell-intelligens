@@ -42,7 +42,7 @@ $ sbatch slurm-file.slurm
 Submitted batch job 123456
 ````
 
-(4) You need the node name, this is how you do it: 
+(4) You need the **node name**, this is how you do it: 
 ````
 $ scontrol show job 123456
 JobId=123456 JobName=JOB_NAME
@@ -54,18 +54,19 @@ JobId=123456 JobName=JOB_NAME
    StdOut=/cluster/home/USER/jupyter.out
 ````
 
-(5) Open new terminal DO NOT CLOSE THIS!
-
-````
-ssh -L 88xx:127.0.0.1:88xx -J USER@idun-login1.hpc.ntnu.no USER@NODE-NAME
-````
-
-(6) In order to now find the link to open the notebook you need to look at the output file from the slurm-job. 
+(5) In order to now find the link to open the notebook you need to look at the output file from the slurm-job. 
 
 ````
 $ cat /cluster/home/USER/jupyter.out
 ````
 
-(7) At the end of the file, you will find a link -- Paste  this in  your web browser
+(6) Open new terminal DO NOT CLOSE THIS!
+
+Here you need to add portnumber found in the output file. Also add the NODE-NAME from the `scontrol show job 123456` command.
+````
+ssh -L 88xx:127.0.0.1:88xx -J USER@idun-login1.hpc.ntnu.no USER@NODE-NAME
+````
+
+(7) At the end of the output file which was opened in step 5 you will find a link -- Paste  this in  your web browser
 
 GOOD JOB 💗
