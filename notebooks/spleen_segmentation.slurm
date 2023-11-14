@@ -1,10 +1,10 @@
 #!/bin/sh
 #SBATCH --partition=GPUQ
 #SBATCH --account=ie-idi
-#SBATCH --time=02:00:00
+#SBATCH --time=03:00:00
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --mem=4G
+#SBATCH --mem=30G
 #SBATCH --job-name="spleen segmentation"
 #SBATCH --output=idun/spleen-segmentation.out
 #SBATCH --gres=gpu:1
