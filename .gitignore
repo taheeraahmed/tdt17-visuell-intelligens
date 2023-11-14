@@ -1,6 +1,11 @@
 # Python miljø
-.visuell-intelligens/
 .venv/
+
+# Jupyter notebook
+.ipynb_checkpoints
 
 # IDUN
 *.out
+
+# Output files from notebooks 
+out/
