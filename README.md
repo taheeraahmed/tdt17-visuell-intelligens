@@ -2,6 +2,12 @@
 
 - Goal: Segmentation on two organs and two models using the Decathlon datasets.
 
+Organs to segment: 
+1. BrainTumour on UNET
+2. Hippocampus on UNET
+3. Liver on UNET
+
+
 Today: 
 - Se på notebook-en prøve å få den til å kjøre UNET
     - Se på et annet (2) organ som får det til å kjøre :))
@@ -64,7 +70,7 @@ $ cat /cluster/home/USER/jupyter.out
 
 Here you need to add portnumber found in the output file. Also add the NODE-NAME from the `scontrol show job 123456` command.
 ````
-ssh -L 88xx:127.0.0.1:88xx -J USER@idun-login1.hpc.ntnu.no USER@NODE-NAME
+ssh -L 8889:127.0.0.1:8889 -J taheeraa@idun-login1.hpc.ntnu.no taheeraa@idun-04-08
 ````
 
 (7) At the end of the output file which was opened in step 5 you will find a link -- Paste  this in  your web browser
