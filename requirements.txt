@@ -3,5 +3,7 @@ nibabel
 matplotlib
 torch 
 pandas
-monai-weekly[gdown, nibabel, tqdm, ignite] # spleen-segmentation notebook
-monai                                      # 
+monai
+fastMONAI
+scikit-learn
+pyfiglet
