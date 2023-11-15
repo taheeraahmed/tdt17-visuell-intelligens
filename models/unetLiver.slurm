@@ -9,8 +9,10 @@
 #SBATCH --output=idun/unetliver-v2.out
 #SBATCH --gres=gpu:1
 
+pwd
+
 module load Python/3.10.8-GCCcore-12.2.0
 
-pip install -r -q requirements.txt
+pip install -q -r requirements.txt
 
 python models/unetLiver.py
