@@ -15,6 +15,22 @@ Today:
 - Se på notebook-en, prøve å få den  til å kjøre med UNET-R
     - (1) Spleen segmentation m/UNET-R
 
+## Overview of taks
+
+![MSD tasks](https://media.springernature.com/full/springer-static/image/art%3A10.1038%2Fs41467-022-30695-9/MediaObjects/41467_2022_30695_Fig1_HTML.png)
+
+| Task Number | Organ              |
+|------------:|:------------------:|
+| 01          | BrainTumour        |
+| 02          | Heart              |
+| 03          | Liver              |
+| 04          | Hippocampus        |
+| 05          | Prostate           |
+| 06          | Lung               |
+| 07          | Pancreas           |
+| 08          | HepaticVessel      |
+| 09          | Spleen             |
+| 10          | Colon              |
 
 ## How to run notebook on IDUN 😮‍💨
 
