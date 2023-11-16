@@ -8,7 +8,6 @@ import numpy as np
 from monai.losses import DiceCELoss
 from monai.networks.nets import UNet
 
-
 def unet_spleen(logger):
     task = 'Task09_Spleen'
     logger.info('Running UNET spleen')
@@ -40,6 +39,22 @@ def unet_spleen(logger):
     learn = Learner(dls, model, loss_func=loss_func, opt_func=ranger, metrics=multi_dice_score)#.to_fp16()
     learn.lr_find()
 
+    lr = 1e-1
 
+    learn.fit_flat_cos(20 ,lr)
+
+    learn.save('checkpoints/task09')
+    learn.show_results(anatomical_plane=0, ds_idx=1)
+
+    learn.load('checkpoints/task09');
+    test_dl = learn.dls.test_dl(test_df[:10],with_labels=True)
+    test_dl.show_batch(anatomical_plane=0, figsize=(10,10))
+
+    pred_acts, labels = learn.get_preds(dl=test_dl)
+    pred_acts.shape, labels.shape
+    multi_dice_score(pred_acts, labels)
+    learn.show_results(anatomical_plane=0, dl=test_dl)
+    store_variables(pkl_fn='vars.pkl', size=size, reorder=reorder,  resample=resample)
+    learn.export('checkpoints/task09/model.pkl')
 
 
