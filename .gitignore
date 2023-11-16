@@ -3,6 +3,7 @@
 
 # Jupyter notebook
 .ipynb_checkpoints
+__pycache__/
 
 # IDUN
 *.out
