@@ -1,5 +1,6 @@
 # Direction 
 
+## TODOs:
 - Goal: Segmentation on two organs and two models using the Decathlon datasets.
 
 Organs to segment: 
@@ -7,13 +8,21 @@ Organs to segment:
 2. Hippocampus on UNET
 3. Liver on UNET
 
-
 Today: 
 - Se på notebook-en prøve å få den til å kjøre UNET
     - Se på et annet (2) organ som får det til å kjøre :))
     - Se på et (3) organ
 - Se på notebook-en, prøve å få den  til å kjøre med UNET-R
     - (1) Spleen segmentation m/UNET-R
+
+## Report from Frank 
+
+1. Data analysis!! 
+2. Explain stuff you are doing :)) 
+3. Discuss the results
+4. Make video/explain the results
+
+Fra Frank: Skal mye til å få lavere enn 40%, så lenge vi har vist at vi har prøvd og gjort det vi skal (3 tasks) og forklarer det vi har gjort ordentlig, ikke bare fått det til å kjøre:,)
 
 ## Overview of taks
 
