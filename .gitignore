@@ -7,6 +7,5 @@ __pycache__/
 
 # IDUN
 *.out
-
-# Output files from notebooks 
 out/
+logs/
