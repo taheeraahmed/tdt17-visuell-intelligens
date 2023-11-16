@@ -23,4 +23,7 @@ module load Python/3.10.8-GCCcore-12.2.0
 pip install -q -r requirements.txt
 
 echo "Running python-script"
-python models/unetSpleen.py
+
+python train.py
+
+echo "Done running train.py"
