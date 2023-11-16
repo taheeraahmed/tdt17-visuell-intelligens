@@ -1,5 +1,4 @@
-from fastMONAI.vision_all import *
-
+from fastMONAI.vision_all import med_img_reader, MedDataset, MedMask, PadOrCrop, RandomAffine, MedMaskBlock, MedImage, RandomSplitter, ColReader, ImageBlock, ZNormalization, MedDataBlock, CustomLoss, multi_dice_score, ranger, Learner, store_variables
 from sklearn.model_selection import train_test_split
 from monai.apps import DecathlonDataset
 from pandas import DataFrame
@@ -41,19 +40,22 @@ def unet_spleen(logger):
 
     lr = 1e-1
 
+    logger.info('Learn-fit-flat')
     learn.fit_flat_cos(20 ,lr)
 
     learn.save('checkpoints/task09')
     learn.show_results(anatomical_plane=0, ds_idx=1)
-
+    logger.info('Saved checkpoints to: checkpoints/task09')
     learn.load('checkpoints/task09');
     test_dl = learn.dls.test_dl(test_df[:10],with_labels=True)
     test_dl.show_batch(anatomical_plane=0, figsize=(10,10))
 
+    logger.info('Predicting')
     pred_acts, labels = learn.get_preds(dl=test_dl)
     pred_acts.shape, labels.shape
     multi_dice_score(pred_acts, labels)
     learn.show_results(anatomical_plane=0, dl=test_dl)
     store_variables(pkl_fn='vars.pkl', size=size, reorder=reorder,  resample=resample)
     learn.export('checkpoints/task09/model.pkl')
+    logger.info('Exported pickle file: checkpoints/task09/model.pkl')
 
