@@ -1,7 +1,7 @@
 #!/bin/sh
 #SBATCH --partition=GPUQ
 #SBATCH --account=ie-idi
-#SBATCH --time=02:00:00
+#SBATCH --time=03:00:00
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --mem=15G
@@ -22,4 +22,5 @@ module load Python/3.10.8-GCCcore-12.2.0
 
 pip install -q -r requirements.txt
 
-python models/unetLiver.py
+echo "Running python-script"
+python models/unetSpleen.py
