@@ -19,5 +19,5 @@ def set_up():
                     logging.StreamHandler()
                 ])
     logger = logging.getLogger()
-    
+    logger.info('Set-up done')
     return logger, project_root

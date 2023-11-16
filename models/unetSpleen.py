@@ -57,4 +57,3 @@ def unet_spleen(logger):
     store_variables(pkl_fn='vars.pkl', size=size, reorder=reorder,  resample=resample)
     learn.export('checkpoints/task09/model.pkl')
 
-
