@@ -1,7 +1,7 @@
-# Python miljø
+# python miljø
 .venv/
 
-# Jupyter notebook
+# jupyter notebook
 .ipynb_checkpoints
 __pycache__/
 
@@ -9,3 +9,7 @@ __pycache__/
 *.out
 out/
 logs/
+
+# models
+*.pth 
+*.pkl
