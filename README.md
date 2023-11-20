@@ -3,25 +3,26 @@
 - Goal: Sementation on two organs and two models using the Decathlon datasets.
 
 Organs to segment: 
-[X] Spleen on UNET
-[X] Pancreas on UNET
-[X] Liver on UNET
+[X] Spleen on UNET 
+[X] Pancreas on UNET 
+[X] Liver on UNET 
 
-What to look further into: 
-[ ] Hyperparamter tuning 
-[ ] Data augmentation
+What to look further into:  
+[ ] Hyperparamter tuning  
+[ ] Data augmentation 
 
 ## TODOs:
 
 Today: 
-[ ] Forstå oss på fastmonai koden mer B)
-[ ] Se bildene som lagres, finne ut hvordan vi kan lagre og se de
+
+[ ] Forstå oss på fastmonai koden mer B) 
+[ ] Se bildene som lagres, finne ut hvordan vi kan lagre og se de 
 [ ] Finne ut hva vi skal se på: Data augmentations? Andre modeller?   
 [ ] Data analysis 
 
 Future:
-[ ] Make video/explain the results
-[ ] Report
+[ ] Make video/explain the results 
+[ ] Report 
 
 ## Report from Frank 
 
