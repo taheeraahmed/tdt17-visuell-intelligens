@@ -1,12 +1,12 @@
 # Direction 
 
+## TODOs:
 - Goal: Segmentation on two organs and two models using the Decathlon datasets.
 
 Organs to segment: 
 1. BrainTumour on UNET
 2. Hippocampus on UNET
 3. Liver on UNET
-
 
 Today: 
 - Se på notebook-en prøve å få den til å kjøre UNET
@@ -15,6 +15,31 @@ Today:
 - Se på notebook-en, prøve å få den  til å kjøre med UNET-R
     - (1) Spleen segmentation m/UNET-R
 
+## Report from Frank 
+
+1. Data analysis!! 
+2. Explain stuff you are doing :)) 
+3. Discuss the results
+4. Make video/explain the results
+
+Fra Frank: Skal mye til å få lavere enn 40%, så lenge vi har vist at vi har prøvd og gjort det vi skal (3 tasks) og forklarer det vi har gjort ordentlig, ikke bare fått det til å kjøre:,)
+
+## Overview of taks
+
+![MSD tasks](https://media.springernature.com/full/springer-static/image/art%3A10.1038%2Fs41467-022-30695-9/MediaObjects/41467_2022_30695_Fig1_HTML.png)
+
+| Task Number | Organ              |
+|------------:|:------------------:|
+| 01          | BrainTumour        |
+| 02          | Heart              |
+| 03          | Liver              |
+| 04          | Hippocampus        |
+| 05          | Prostate           |
+| 06          | Lung               |
+| 07          | Pancreas           |
+| 08          | HepaticVessel      |
+| 09          | Spleen             |
+| 10          | Colon              |
 
 ## How to run notebook on IDUN 😮‍💨
 

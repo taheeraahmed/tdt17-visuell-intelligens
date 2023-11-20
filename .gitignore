@@ -1,11 +1,15 @@
-# Python miljø
+# python miljø
 .venv/
 
-# Jupyter notebook
+# jupyter notebook
 .ipynb_checkpoints
+__pycache__/
 
 # IDUN
 *.out
-
-# Output files from notebooks 
 out/
+logs/
+
+# models
+*.pth 
+*.pkl

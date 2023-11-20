@@ -4,14 +4,13 @@ from sklearn.model_selection import train_test_split
 from monai.apps import DecathlonDataset
 from pandas import DataFrame
 import numpy as np
-import pyfiglet
 
 from monai.losses import DiceCELoss
 from monai.networks.nets import UNet
 
-result = pyfiglet.figlet_format("VI babes", font = "slant"  ) 
-print(result) 
+print("start")
 
+print('Running UNET liver')
 data_path = '/cluster/projects/vc/data/mic/open/MSD'
 
 print('Loading data..')
@@ -38,7 +37,25 @@ model = UNet(spatial_dims=3, in_channels=1, out_channels=n_classes, channels=(16
 loss_func = CustomLoss(loss_func=DiceCELoss(to_onehot_y=True, include_background=True, softmax=True))
 
 learn = Learner(dls, model, loss_func=loss_func, opt_func=ranger, metrics=multi_dice_score)#.to_fp16()
-learn.lr_find()
+print(learn.lr_find())
+print("done with find")
+
+lr = 1e-1
+learn.fit_flat_cos(20 ,lr)
+learn.save('liver-model')
+print(learn.show_results(anatomical_plane=0, ds_idx=1))
+print("training stuff done, now inference")
+
+learn.load('liver-model')
+test_dl = learn.dls.test_dl(test_df[:10],with_labels=True)
+print(test_dl.show_batch(anatomical_plane=0, figsize=(10,10)))
+
+pred_acts, labels = learn.get_preds(dl=test_dl)
+print(multi_dice_score(pred_acts, labels))
+print(learn.show_results(anatomical_plane=0, dl=test_dl))
+
+print("done")
+
 
 
 
