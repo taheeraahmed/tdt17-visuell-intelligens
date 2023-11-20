@@ -4,6 +4,8 @@ from monai.apps import DecathlonDataset
 from pandas import DataFrame
 import numpy as np
 
+from helpers.create_dir import create_directory_if_not_exists
+
 from monai.losses import DiceCELoss
 from monai.networks.nets import UNet
 
@@ -43,6 +45,9 @@ def unet_spleen(logger):
     logger.info('Learn-fit-flat')
     learn.fit_flat_cos(20 ,lr)
 
+    # create the directory if it doesn't exist
+    create_directory_if_not_exists('checkpoints/task09')
+
     learn.save('checkpoints/task09')
     learn.show_results(anatomical_plane=0, ds_idx=1)
     logger.info('Saved checkpoints to: checkpoints/task09')
@@ -56,6 +61,7 @@ def unet_spleen(logger):
     multi_dice_score(pred_acts, labels)
     learn.show_results(anatomical_plane=0, dl=test_dl)
     store_variables(pkl_fn='vars.pkl', size=size, reorder=reorder,  resample=resample)
+
     learn.export('checkpoints/task09/model.pkl')
     logger.info('Exported pickle file: checkpoints/task09/model.pkl')
 

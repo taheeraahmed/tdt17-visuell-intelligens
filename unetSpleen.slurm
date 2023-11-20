@@ -6,7 +6,7 @@
 #SBATCH --ntasks-per-node=1
 #SBATCH --mem=15G
 #SBATCH --job-name="vi"
-#SBATCH --output=idun/unet-spleen.out
+#SBATCH --output=idun/23-11-20-unet-spleen.out
 #SBATCH --gres=gpu:1
 
 echo "We are running from this directory: $SLURM_SUBMIT_DIR"
