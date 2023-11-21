@@ -1,12 +1,12 @@
 #!/bin/sh
 #SBATCH --partition=GPUQ
 #SBATCH --account=ie-idi
-#SBATCH --time=12:00:00
+#SBATCH --time=20:00:00
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --mem=15G
+#SBATCH --mem=30G
 #SBATCH --job-name="vi"
-#SBATCH --output=idun/unetliver.out
+#SBATCH --output=idun/unetliver-v2.out
 #SBATCH --gres=gpu:1
 
 echo "We are running from this directory: $SLURM_SUBMIT_DIR"
