@@ -3,10 +3,10 @@
 #SBATCH --account=ie-idi
 #SBATCH --time=20:00:00
 #SBATCH --nodes=1
-#SBATCH --ntasks-per-node=15
+#SBATCH --ntasks-per-node=1
 #SBATCH --mem=30G
 #SBATCH --job-name="vi"
-#SBATCH --output=idun/unetpancreas-v1.out
+#SBATCH --output=Pancreas/v1/unetpancreas-v1.out
 #SBATCH --gres=gpu:1
 
 echo "We are running from this directory: $SLURM_SUBMIT_DIR"

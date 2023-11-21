@@ -6,4 +6,5 @@ pandas
 monai
 fastMONAI
 scikit-learn
+codecarbon
 pyfiglet
