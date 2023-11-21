@@ -1,13 +1,13 @@
 #!/bin/sh
 #SBATCH --partition=GPUQ
 #SBATCH --account=ie-idi
-#SBATCH --time=10:00:00
+#SBATCH --time=20:00:00
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --mem=30G
-#SBATCH --job-name="vi"
-#SBATCH --output=idun/unetliver-v3.out
-#SBATCH --gres=gpu:1
+#SBATCH --job-name="00_liver"
+#SBATCH --output=idun/00_unetliver.out
+#SBATCH --gres=gpu:3
 
 echo "We are running from this directory: $SLURM_SUBMIT_DIR"
 echo "The name of the job is: $SLURM_JOB_NAME"

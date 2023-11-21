@@ -10,6 +10,7 @@ from monai.losses import DiceCELoss
 from monai.networks.nets import UNet
 
 def unet_liver(logger):
+  logger.info('Running UNET liver with "no" augmentations except Znormalization and PadOrCrop, version 00')
 
   data_path = '/cluster/projects/vc/data/mic/open/MSD'
 
@@ -35,37 +36,36 @@ def unet_liver(logger):
   logger.info(summary_df.head())
 
   resample, reorder = med_dataset.suggestion()
-  item_tfms = [ZNormalization(), PadOrCrop(size), RandomAffine(translation = (-15, 15))]
+  item_tfms = [ZNormalization(), PadOrCrop(size)] #RandomAffine(translation = (-15, 15))
   dblock = MedDataBlock(blocks=(ImageBlock(cls=MedImage), MedMaskBlock), splitter=RandomSplitter(seed=42), get_x=ColReader('image'), get_y=ColReader('label'), item_tfms=item_tfms,reorder=reorder,resample=resample)
   dls = dblock.dataloaders(train_df, bs=bs)
   logger.info(f'len traing:  {len(dls.train_ds.items)}   len val: {len(dls.valid_ds.items)}')
   dls.show_batch(anatomical_plane=0)
-  plt.savefig("liver/1batch.png")
+  plt.savefig("liver/00_batch.png")
   logger.info('Done with MedData stuff..')
 
-  # model = UNet(spatial_dims=3, in_channels=1, out_channels=n_classes, channels=(16, 32, 64, 128, 256),strides=(2, 2, 2, 2), num_res_units=2)
-  # loss_func = CustomLoss(loss_func=DiceCELoss(to_onehot_y=True, include_background=True, softmax=True))
+  model = UNet(spatial_dims=3, in_channels=1, out_channels=n_classes, channels=(16, 32, 64, 128, 256),strides=(2, 2, 2, 2), num_res_units=2)
+  loss_func = CustomLoss(loss_func=DiceCELoss(to_onehot_y=True, include_background=True, softmax=True))
 
-  # learn = Learner(dls, model, loss_func=loss_func, opt_func=ranger, metrics=multi_dice_score)#.to_fp16()
-  # learn.lr_find()
-  # plt.savefig("liver/lr_find_liver.png")
-  # logger.info("done with find")
+  learn = Learner(dls, model, loss_func=loss_func, opt_func=ranger, metrics=multi_dice_score)#.to_fp16()
+  lr = learn.lr_find()
+  plt.savefig("liver/00_lr_find.png")
+  logger.info("done with find")
 
-  # lr = 1e-1
-  # learn.fit_flat_cos(10 ,lr)
-  # learn.save('liver-model')
-  # learn.show_results(anatomical_plane=0, ds_idx=1)
-  # plt.savefig("liver/fit_liver.png")
-  # logger.info("training stuff done, now inference")
+  learn.fit_flat_cos(50 ,lr)
+  learn.save('liver-model')
+  learn.show_results(anatomical_plane=0, ds_idx=1)
+  plt.savefig("liver/00_fit.png")
+  logger.info("training stuff done, now inference")
 
-  # learn.load('liver-model')
-  # test_dl = learn.dls.test_dl(test_df[:10],with_labels=True)
-  # test_dl.show_batch(anatomical_plane=0, figsize=(10,10))
+  learn.load('liver-model')
+  test_dl = learn.dls.test_dl(test_df[:10],with_labels=True)
+  test_dl.show_batch(anatomical_plane=0, figsize=(10,10))
 
-  # pred_acts, labels = learn.get_preds(dl=test_dl)
-  # multi_dice_score(pred_acts, labels)
-  # learn.show_results(anatomical_plane=0, dl=test_dl)
-  # plt.savefig("liver/results_liver.png")
+  pred_acts, labels = learn.get_preds(dl=test_dl)
+  logger.info(f'{multi_dice_score(pred_acts, labels)}')
+  learn.show_results(anatomical_plane=0, dl=test_dl)
+  plt.savefig("liver/00_results.png")
 
   logger.info("done")
 
