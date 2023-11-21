@@ -12,8 +12,6 @@ import sys
 def unet_spleen(logger, job_id):
     path = f'./output/{job_id}'
     create_directory_if_not_exists(path)
-
-    logger.info('Running UNET spleen')
     task = 'Task09_Spleen'
 
     logger.info('Loading data..')
@@ -54,16 +52,16 @@ def unet_spleen(logger, job_id):
     learn = Learner(dls, model, loss_func=loss_func, opt_func=ranger, metrics=multi_dice_score)#.to_fp16()
     learn.lr_find()
     plt.savefig(path+'/task09-spleen-lr-find.png')
-    logger.info('Figure has been stored at path: ./output/task09-spleen-lr-find.png')
+    logger.info(f'Figure has been stored at path: {path}/task09-spleen-lr-find.png')
 
     logger.info('Learn-fit-flat')
     lr = 1e-1
-    learn.fit_flat_cos(20 ,lr)
+    learn.fit_flat_cos(50 ,lr)
 
     learn.save(path + '/')
     learn.show_results(anatomical_plane=0, ds_idx=1)
     plt.savefig(path +'/task09-show-results.png')  # Replace with your desired file path and name
-    logger.info('Figure has been stored at path')
+    logger.info(f'Figure has been stored at path: {path}/task09-show-results.png')
 
 
     logger.info('Saved checkpoints to: checkpoints/task09')
@@ -71,7 +69,7 @@ def unet_spleen(logger, job_id):
     test_dl = learn.dls.test_dl(test_df[:10],with_labels=True)
     test_dl.show_batch(anatomical_plane=0, figsize=(10,10))
     plt.savefig(path + '/task09-show-batch.png')
-    logger.info('Figure has been stored at path: ./output/task09-show-batch.png')
+    logger.info(f'Figure has been stored at path: {path}/task09-show-batch.png')
 
     logger.info('Predicting')
     pred_acts, labels = learn.get_preds(dl=test_dl)
@@ -82,6 +80,6 @@ def unet_spleen(logger, job_id):
     logger.info('Figure has been stored at path: ./output/task09-show-results.png')
 
     store_variables(pkl_fn='vars.pkl', size=size, reorder=reorder,  resample=resample)
-
     learn.export(path + '/task09-model.pkl')
+
     logger.info('Exported pickle file: ./output/checkpoints/task09-model.pkl')

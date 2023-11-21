@@ -10,11 +10,8 @@ from monai.losses import DiceCELoss
 from monai.networks.nets import UNet
 
 def unet_liver(logger):
-  logger.info('Running UNET liver')
 
   data_path = '/cluster/projects/vc/data/mic/open/MSD'
-
-  # Below is code with fastMonai 
 
   logger.info('Loading data..')
   training_data = DecathlonDataset(root_dir=data_path, task="Task03_Liver", section="training", cache_num=0, num_workers=3)

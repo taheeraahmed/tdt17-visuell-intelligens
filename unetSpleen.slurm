@@ -5,9 +5,9 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --mem=15G
-#SBATCH --job-name="vi"
-#SBATCH --output=idun/23-11-20-unet-spleen-with-saving-outputs.out
-#SBATCH --gres=gpu:2
+#SBATCH --job-name="tdt017-franky-boi-give-us-a"
+#SBATCH --output=idun/23-11-21-testing-parse-argument-with-model.out
+#SBATCH --gres=gpu:1
 
 echo "We are running from this directory: $SLURM_SUBMIT_DIR"
 echo "The name of the job is: $SLURM_JOB_NAME"
@@ -24,6 +24,6 @@ pip install -q -r requirements.txt
 
 echo "Running python-script"
 
-python train.py
+python train.py -id $SLURM_JOB_ID -m "unet_spleen"
 
 echo "Done running train.py"
