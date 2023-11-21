@@ -15,9 +15,9 @@ What to look further into:
 
 Today: 
 
-[ ] Forstå oss på fastmonai koden mer B) 
-[ ] Se bildene som lagres, finne ut hvordan vi kan lagre og se de 
-[ ] Finne ut hva vi skal se på: Data augmentations? Andre modeller?   
+[X] Forstå oss på fastmonai koden mer B) 
+[X] Se bildene som lagres, finne ut hvordan vi kan lagre og se de 
+[ ] Finne ut hva vi skal se på: Data augmentations og andre modeller!!!
 [ ] Data analysis 
 
 Future:
