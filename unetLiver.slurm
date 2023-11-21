@@ -1,12 +1,12 @@
 #!/bin/sh
 #SBATCH --partition=GPUQ
 #SBATCH --account=ie-idi
-#SBATCH --time=20:00:00
+#SBATCH --time=10:00:00
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --mem=30G
 #SBATCH --job-name="vi"
-#SBATCH --output=idun/unetliver-v2.out
+#SBATCH --output=idun/unetliver-v3.out
 #SBATCH --gres=gpu:1
 
 echo "We are running from this directory: $SLURM_SUBMIT_DIR"
@@ -22,4 +22,4 @@ module load Python/3.10.8-GCCcore-12.2.0
 
 pip install -q -r requirements.txt
 
-python models/unetLiver.py
+python train.py

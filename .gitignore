@@ -14,5 +14,5 @@ logs/
 *.pth 
 *.pkl
 
-# figures
-figures/
+# liver figures
+liver/
