@@ -15,7 +15,7 @@ def main(args):
     with EmissionsTracker() as tracker:
         if args.model == "unet_spleen":
             logger.info('Running unet_spleen')
-            unet_spleen(logger=logger)
+            unet_spleen(logger=logger, job_id=job_id)
         elif args.model == "unet_liver":
             logger.info('Running unet_liver')
             unet_liver(logger=logger)
