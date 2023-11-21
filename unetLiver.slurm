@@ -7,7 +7,7 @@
 #SBATCH --mem=30G
 #SBATCH --job-name="00_liver"
 #SBATCH --output=idun/00_unetliver.out
-#SBATCH --gres=gpu:3
+#SBATCH --gres=gpu:2
 
 echo "We are running from this directory: $SLURM_SUBMIT_DIR"
 echo "The name of the job is: $SLURM_JOB_NAME"
