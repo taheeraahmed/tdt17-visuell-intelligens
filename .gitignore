@@ -1,5 +1,6 @@
 # python miljø
 .venv/
+.vi/
 
 # jupyter notebook
 .ipynb_checkpoints
@@ -20,3 +21,6 @@ liver/
 
 #code carbon
 emissions.csv
+
+# data 
+dataset/
