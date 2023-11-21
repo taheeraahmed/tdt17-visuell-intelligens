@@ -9,21 +9,20 @@ from monai.losses import DiceCELoss
 from monai.networks.nets import UNet
 import sys
 
-def unet_spleen(logger):
-    create_directory_if_not_exists('./output')
-    create_directory_if_not_exists('./checkpoints/task09')
+def unet_spleen(logger, job_id):
+    path = f'./output/{job_id}'
+    create_directory_if_not_exists(path)
 
-    task = 'Task09_Spleen'
     logger.info('Running UNET spleen')
-    data_path = '/cluster/projects/vc/data/mic/open/MSD'
+    task = 'Task09_Spleen'
 
     logger.info('Loading data..')
+    data_path = '/cluster/projects/vc/data/mic/open/MSD'
     training_data = DecathlonDataset(root_dir=data_path, task=task, section="training", download=False, cache_num=0, num_workers=3)
     logger.info('Done loading data!')
 
     df = DataFrame(training_data.data)
     train_df, test_df = train_test_split(df, test_size=0.1, random_state=42)
-
     codes = np.unique(med_img_reader(train_df.label.tolist()[0]))
     n_classes = len(codes)
 
@@ -44,8 +43,8 @@ def unet_spleen(logger):
     )
     dls = dblock.dataloaders(train_df, bs=bs)
     dls.show_batch(anatomical_plane=0)
-    plt.savefig('./output/task09-dls.png') 
-    logger.info('Figure has been stored at path: ./output/task09-dls.png')
+    plt.savefig(path+'/task09-dls.png') 
+    logger.info(f'Figure has been stored at path: {path}')
     logger.info('Done with MedData stuff..')
 
     model = UNet(spatial_dims=3, in_channels=1, out_channels=n_classes, channels=(16, 32, 64, 128, 256),strides=(2, 2, 2, 2), num_res_units=2)
@@ -54,24 +53,24 @@ def unet_spleen(logger):
     logger.info('Running learner and lr_find')
     learn = Learner(dls, model, loss_func=loss_func, opt_func=ranger, metrics=multi_dice_score)#.to_fp16()
     learn.lr_find()
-    plt.savefig('./output/task09-spleen-lr-find.png')
+    plt.savefig(path+'/task09-spleen-lr-find.png')
     logger.info('Figure has been stored at path: ./output/task09-spleen-lr-find.png')
 
     logger.info('Learn-fit-flat')
     lr = 1e-1
     learn.fit_flat_cos(20 ,lr)
 
-    learn.save('./checkpoints/task09')
+    learn.save(path + '/')
     learn.show_results(anatomical_plane=0, ds_idx=1)
-    plt.savefig('./output/task09-show-results.png')  # Replace with your desired file path and name
-    logger.info('Figure has been stored at path: ./output/task09-show-results.png')
+    plt.savefig(path +'/task09-show-results.png')  # Replace with your desired file path and name
+    logger.info('Figure has been stored at path')
 
 
     logger.info('Saved checkpoints to: checkpoints/task09')
     learn.load('./checkpoints/task09');
     test_dl = learn.dls.test_dl(test_df[:10],with_labels=True)
     test_dl.show_batch(anatomical_plane=0, figsize=(10,10))
-    plt.savefig('./output/task09-show-batch.png')
+    plt.savefig(path + '/task09-show-batch.png')
     logger.info('Figure has been stored at path: ./output/task09-show-batch.png')
 
     logger.info('Predicting')
@@ -79,10 +78,10 @@ def unet_spleen(logger):
     pred_acts.shape, labels.shape
     multi_dice_score(pred_acts, labels)
     learn.show_results(anatomical_plane=0, dl=test_dl)
-    plt.savefig('./output/task09-show-results.png')  # Replace with your desired file path and name
+    plt.savefig(path + '/task09-show-results.png')  # Replace with your desired file path and name
     logger.info('Figure has been stored at path: ./output/task09-show-results.png')
 
     store_variables(pkl_fn='vars.pkl', size=size, reorder=reorder,  resample=resample)
 
-    learn.export('./output/checkpoints/task09-model.pkl')
+    learn.export(path + '/task09-model.pkl')
     logger.info('Exported pickle file: ./output/checkpoints/task09-model.pkl')
