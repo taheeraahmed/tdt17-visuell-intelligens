@@ -17,7 +17,9 @@ def unet_spleen(logger, job_id=0):
     logger.info('Baseline')
 
     logger.info('Loading data..')
-    data_path = '/cluster/projects/vc/data/mic/open/MSD'
+    
+    #data_path = '/cluster/projects/vc/data/mic/open/MSD'                               #IDUN
+    data_path = 'C:\\Users\\Taheera Ahmed\\code\\tdt17-visuell-intelligens\\dataset'    #Locally
     training_data = DecathlonDataset(root_dir=data_path, task=task, section="training", download=False, cache_num=0, num_workers=3)
     logger.info('Done loading data!')
 
