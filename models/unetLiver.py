@@ -31,19 +31,19 @@ def unet_liver(logger):
 
   logger.info('MedData stuff..')
   bs=4
-  size=[256,256,400] #change to something that fits the liver images (changed from 224,224,128 -> 256,256,400)
+  size=[256,256,350] #change to something that fits the liver images (changed from 224,224,128 -> 256,256,350)
   med_dataset = MedDataset(img_list=train_df.label.tolist(), dtype=MedMask, max_workers=12)
   logger.info(med_dataset.df.iloc[0,:])
   summary_df = med_dataset.summary()
   logger.info(summary_df.head())
 
   resample, reorder = med_dataset.suggestion()
-  item_tfms = [ZNormalization(), PadOrCrop(size), RandomAffine(scales=0, degrees=5, isotropic=True)]
+  item_tfms = [ZNormalization(), PadOrCrop(size), RandomAffine(translation = (-15, 15))]
   dblock = MedDataBlock(blocks=(ImageBlock(cls=MedImage), MedMaskBlock), splitter=RandomSplitter(seed=42), get_x=ColReader('image'), get_y=ColReader('label'), item_tfms=item_tfms,reorder=reorder,resample=resample)
   dls = dblock.dataloaders(train_df, bs=bs)
-  logger.info('len traing: ',len(dls.train_ds.items), 'len val: ', len(dls.valid_ds.items))
+  logger.info(f'len traing:  {len(dls.train_ds.items)}   len val: {len(dls.valid_ds.items)}')
   dls.show_batch(anatomical_plane=0)
-  plt.savefig("liver/batch_liver.png")
+  plt.savefig("liver/1batch.png")
   logger.info('Done with MedData stuff..')
 
   # model = UNet(spatial_dims=3, in_channels=1, out_channels=n_classes, channels=(16, 32, 64, 128, 256),strides=(2, 2, 2, 2), num_res_units=2)
