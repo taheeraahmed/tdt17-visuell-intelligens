@@ -14,6 +14,8 @@ def unet_spleen(logger, job_id):
     create_directory_if_not_exists(path)
     task = 'Task09_Spleen'
 
+    logger.info('Baseline')
+
     logger.info('Loading data..')
     data_path = '/cluster/projects/vc/data/mic/open/MSD'
     training_data = DecathlonDataset(root_dir=data_path, task=task, section="training", download=False, cache_num=0, num_workers=3)
@@ -29,7 +31,8 @@ def unet_spleen(logger, job_id):
     size=[512,512,128]
     med_dataset = MedDataset(img_list=train_df.label.tolist(), dtype=MedMask, max_workers=12)
     resample, reorder = med_dataset.suggestion()
-    item_tfms = [ZNormalization(), PadOrCrop(size), RandomAffine(scales=0, degrees=5, isotropic=True)]
+    item_tfms = [ZNormalization(), PadOrCrop(size)]
+    logger.info(f'{item_tfms}')
     dblock = MedDataBlock(
         blocks=(ImageBlock(cls=MedImage), MedMaskBlock), 
         splitter=RandomSplitter(seed=42), 
@@ -50,12 +53,11 @@ def unet_spleen(logger, job_id):
 
     logger.info('Running learner and lr_find')
     learn = Learner(dls, model, loss_func=loss_func, opt_func=ranger, metrics=multi_dice_score)#.to_fp16()
-    learn.lr_find()
+    lr = learn.lr_find()
     plt.savefig(path+'/task09-spleen-lr-find.png')
     logger.info(f'Figure has been stored at path: {path}/task09-spleen-lr-find.png')
 
     logger.info('Learn-fit-flat')
-    lr = 1e-1
     learn.fit_flat_cos(50 ,lr)
 
     learn.save(path + '/')
@@ -77,9 +79,9 @@ def unet_spleen(logger, job_id):
     multi_dice_score(pred_acts, labels)
     learn.show_results(anatomical_plane=0, dl=test_dl)
     plt.savefig(path + '/task09-show-results.png')  # Replace with your desired file path and name
-    logger.info('Figure has been stored at path: ./output/task09-show-results.png')
+    logger.info(f'Figure has been stored at path: {path}/task09-show-results.png')
 
     store_variables(pkl_fn='vars.pkl', size=size, reorder=reorder,  resample=resample)
-    learn.export(path + '/task09-model.pkl')
+    learn.export(path + '/model.pkl')
 
-    logger.info('Exported pickle file: ./output/checkpoints/task09-model.pkl')
+    logger.info(f'Exported pickle file: {path}/model.pkl')
