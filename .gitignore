@@ -9,6 +9,7 @@ __pycache__/
 *.out
 out/
 logs/
+output/
 
 # models
 *.pth 
@@ -16,3 +17,6 @@ logs/
 
 # liver figures
 liver/
+
+#code carbon
+emissions.csv
