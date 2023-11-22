@@ -14,7 +14,7 @@ def unet_spleen(logger, job_id=0):
     create_directory_if_not_exists(path)
     task = 'Task09_Spleen'
 
-    logger.info('Baseline')
+    logger.info('Random affine')
 
     logger.info('Loading data..')
     
@@ -33,7 +33,7 @@ def unet_spleen(logger, job_id=0):
     size=[512,512,128]
     med_dataset = MedDataset(img_list=train_df.label.tolist(), dtype=MedMask, max_workers=12)
     resample, reorder = med_dataset.suggestion()
-    item_tfms = [ZNormalization(), PadOrCrop(size)]
+    item_tfms = [ZNormalization(), PadOrCrop(size), RandomAffine(degrees=15, translation=15)]
     logger.info(f'{item_tfms}')
     dblock = MedDataBlock(
         blocks=(ImageBlock(cls=MedImage), MedMaskBlock), 
@@ -51,6 +51,7 @@ def unet_spleen(logger, job_id=0):
     logger.info('Done with MedData stuff..')
 
     model = UNet(spatial_dims=3, in_channels=1, out_channels=n_classes, channels=(16, 32, 64, 128, 256),strides=(2, 2, 2, 2), num_res_units=2)
+    
     loss_func = CustomLoss(loss_func=DiceCELoss(to_onehot_y=True, include_background=True, softmax=True))
 
     logger.info('Running learner and lr_find')
@@ -62,14 +63,14 @@ def unet_spleen(logger, job_id=0):
     logger.info('Learn-fit-flat')
     learn.fit_flat_cos(50 ,lr)
 
-    learn.save(path + '/spleen-model')
+    learn.save('spleen-model')
     logger.info(f'Model has been stored at path: {path}/spleen-model.pth')
     learn.show_results(anatomical_plane=0, ds_idx=1)
     plt.savefig(path +'/task09-show-results.png')  # Replace with your desired file path and name
     logger.info(f'Figure has been stored at path: {path}/task09-show-results.png')
 
 
-    learn.load(path + '/spleen-model');
+    learn.load('spleen-model');
     logger.info(f'Model has been loaded at path: {path}/spleen-model.pth')
     test_dl = learn.dls.test_dl(test_df[:10],with_labels=True)
     test_dl.show_batch(anatomical_plane=0, figsize=(10,10))

@@ -33,7 +33,7 @@ def main(args):
 
 def run_models(model, logger, job_id):
     if model == "unet_spleen":
-        logger.info('Running unet_spleen')
+        logger.info('Running unet_spleen w/random affine')
         unet_spleen(logger=logger, job_id=job_id)
     elif model == "unet_liver":
         logger.info('Running unet_liver')

@@ -1,12 +1,12 @@
 #!/bin/sh
 #SBATCH --partition=GPUQ
 #SBATCH --account=ie-idi
-#SBATCH --time=5:00:00
+#SBATCH --time=20:00:00
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --mem=15G
-#SBATCH --job-name="tdt017-franky-boi-give-us-a-baseline"
-#SBATCH --output=idun/23-11-21-baseline.out
+#SBATCH --mem=30G
+#SBATCH --job-name="tdt017-franky-boi-give-us-a-rand-affine"
+#SBATCH --output=idun/22-11-21-15-11-rand-affine.out
 #SBATCH --gres=gpu:1
 
 echo "We are running from this directory: $SLURM_SUBMIT_DIR"
