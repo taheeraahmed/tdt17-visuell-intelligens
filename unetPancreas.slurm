@@ -5,8 +5,8 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --mem=30G
-#SBATCH --job-name="vi"
-#SBATCH --output=models/Pancreas/v2/unetpancreas-v2.out
+#SBATCH --job-name="Pancreas_v1"
+#SBATCH --output=models/Pancreas/v1/unetpancreas-v1.out
 #SBATCH --gres=gpu:1
 
 echo "We are running from this directory: $SLURM_SUBMIT_DIR"
@@ -20,6 +20,8 @@ echo "Total of $SLURM_NTASKS cores"
 
 module load Python/3.10.8-GCCcore-12.2.0
 
-pip install -q -r ../requirements.txt
+pip install -q -r requirements.txt
 
 python train.py -id $SLURM_JOB_ID -m "unet_pancreas"
+
+echo "Done running train.py"H
