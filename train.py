@@ -1,4 +1,5 @@
 from helpers.set_up import set_up
+from helpers.check_nvml_error import check_nvml_error
 from models.unetSpleen import unet_spleen
 from models.unetLiver import unet_liver
 from models.unetPancreas import unet_pancreas
@@ -15,7 +16,24 @@ def main(args):
     logger.info(f"Job ID: {job_id}")
     
     start_time = time.time()
-    with EmissionsTracker() as tracker:
+    
+    if check_nvml_error(logger=logger) == 0:
+        logger.info('Code carbon is working B)')
+        with EmissionsTracker() as tracker:
+            if args.model == "unet_spleen":
+                logger.info('Running unet_spleen')
+                unet_spleen(logger=logger, job_id=job_id)
+            elif args.model == "unet_liver":
+                logger.info('Running unet_liver')
+                unet_liver(logger=logger)
+            elif args.model == "unet_pancreas":
+                logger.info('Running unet_pancreas')
+                unet_pancreas(logger=logger)
+            else:
+                logger.error("Invalid model selected")
+                sys.exit(1)
+    else: 
+        logger.info('Dropped carbon tracker :/')
         if args.model == "unet_spleen":
             logger.info('Running unet_spleen')
             unet_spleen(logger=logger, job_id=job_id)
@@ -27,7 +45,7 @@ def main(args):
             unet_pancreas(logger=logger)
         else:
             logger.error("Invalid model selected")
-            sys.exit(1)    
+            sys.exit(1)
     # Calculate elapsed time
     elapsed_time = time.time() - start_time
     logger.info(f"Elapsed time: {elapsed_time:.2f} seconds")
