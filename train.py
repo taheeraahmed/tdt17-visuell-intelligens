@@ -5,13 +5,16 @@ from models.unetPancreas import unet_pancreas
 import sys
 import argparse
 from codecarbon import EmissionsTracker
+import time 
 
 def main(args):
     logger, project_root = set_up()
     sys.path.append(project_root)
     
     job_id = args.id
-
+    logger.info(f"Job ID: {job_id}")
+    
+    start_time = time.time()
     with EmissionsTracker() as tracker:
         if args.model == "unet_spleen":
             logger.info('Running unet_spleen')
@@ -25,6 +28,9 @@ def main(args):
         else:
             logger.error("Invalid model selected")
             sys.exit(1)    
+    # Calculate elapsed time
+    elapsed_time = time.time() - start_time
+    logger.info(f"Elapsed time: {elapsed_time:.2f} seconds")
     logger.info('Finished running the code')
     
 if __name__ == "__main__":
