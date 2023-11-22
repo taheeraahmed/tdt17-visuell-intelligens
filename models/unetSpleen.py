@@ -62,14 +62,14 @@ def unet_spleen(logger, job_id=0):
     logger.info('Learn-fit-flat')
     learn.fit_flat_cos(50 ,lr)
 
-    learn.save()
+    learn.save(path + '/spleen-model')
     learn.show_results(anatomical_plane=0, ds_idx=1)
     plt.savefig(path +'/task09-show-results.png')  # Replace with your desired file path and name
     logger.info(f'Figure has been stored at path: {path}/task09-show-results.png')
 
 
     logger.info('Saved checkpoints to: checkpoints/task09')
-    learn.load();
+    learn.load(path + '/spleen-model');
     test_dl = learn.dls.test_dl(test_df[:10],with_labels=True)
     test_dl.show_batch(anatomical_plane=0, figsize=(10,10))
     plt.savefig(path + '/task09-show-batch.png')
