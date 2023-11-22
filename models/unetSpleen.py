@@ -18,8 +18,8 @@ def unet_spleen(logger, job_id=0):
 
     logger.info('Loading data..')
     
-    #data_path = '/cluster/projects/vc/data/mic/open/MSD'                               #IDUN
-    data_path = 'C:\\Users\\Taheera Ahmed\\code\\tdt17-visuell-intelligens\\dataset'    #Locally
+    data_path = '/cluster/projects/vc/data/mic/open/MSD'                               #IDUN
+    #data_path = 'C:\\Users\\Taheera Ahmed\\code\\tdt17-visuell-intelligens\\dataset'    #Locally
     training_data = DecathlonDataset(root_dir=data_path, task=task, section="training", download=False, cache_num=0, num_workers=3)
     logger.info('Done loading data!')
 
@@ -62,14 +62,14 @@ def unet_spleen(logger, job_id=0):
     logger.info('Learn-fit-flat')
     learn.fit_flat_cos(50 ,lr)
 
-    learn.save(path + '/')
+    learn.save()
     learn.show_results(anatomical_plane=0, ds_idx=1)
     plt.savefig(path +'/task09-show-results.png')  # Replace with your desired file path and name
     logger.info(f'Figure has been stored at path: {path}/task09-show-results.png')
 
 
     logger.info('Saved checkpoints to: checkpoints/task09')
-    learn.load('./checkpoints/task09');
+    learn.load();
     test_dl = learn.dls.test_dl(test_df[:10],with_labels=True)
     test_dl.show_batch(anatomical_plane=0, figsize=(10,10))
     plt.savefig(path + '/task09-show-batch.png')
