@@ -1,14 +1,14 @@
 from pynvml import *
 
-def check_nvml_error(logger=loggr): 
+def check_nvml_error(logger): 
     try:
         nvmlInit()
-        logger.info("Driver Version:", nvmlSystemGetDriverVersion())
+        logger.info(f"Driver Version: {nvmlSystemGetDriverVersion()}")
         deviceCount = nvmlDeviceGetCount()
         devices = []  
         for i in range(deviceCount):
             handle = nvmlDeviceGetHandleByIndex(i)
-            logger.info("Device", i, ":", nvmlDeviceGetName(handle))
+            logger.info(f"Device {i}: {nvmlDeviceGetName(handle)}")
             #gpu_device = GPUDevice(handle=handle, gpu_index=i) 
             devices.append(nvmlDeviceGetTotalEnergyConsumption(handle))
         return 0

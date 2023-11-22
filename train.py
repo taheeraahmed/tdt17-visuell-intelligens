@@ -33,7 +33,7 @@ def main(args):
                 logger.error("Invalid model selected")
                 sys.exit(1)
     else: 
-        logger.info('Dropped carbon tracker :/')
+        logger.warning('Dropped carbon tracker :/')
         if args.model == "unet_spleen":
             logger.info('Running unet_spleen')
             unet_spleen(logger=logger, job_id=job_id)
