@@ -13,43 +13,37 @@ def main(args):
     sys.path.append(project_root)
     
     job_id = args.id
+    model = args.model
     logger.info(f"Job ID: {job_id}")
     
     start_time = time.time()
     
     if check_nvml_error(logger=logger) == 0:
         logger.info('Code carbon is working B)')
-        with EmissionsTracker() as tracker:
-            if args.model == "unet_spleen":
-                logger.info('Running unet_spleen')
-                unet_spleen(logger=logger, job_id=job_id)
-            elif args.model == "unet_liver":
-                logger.info('Running unet_liver')
-                unet_liver(logger=logger)
-            elif args.model == "unet_pancreas":
-                logger.info('Running unet_pancreas')
-                unet_pancreas(logger=logger)
-            else:
-                logger.error("Invalid model selected")
-                sys.exit(1)
+        with EmissionsTracker(project_name=args.model) as tracker:
+            run_models(model, logger, job_id=job_id)
     else: 
         logger.warning('Dropped carbon tracker :/')
-        if args.model == "unet_spleen":
-            logger.info('Running unet_spleen')
-            unet_spleen(logger=logger, job_id=job_id)
-        elif args.model == "unet_liver":
-            logger.info('Running unet_liver')
-            unet_liver(logger=logger)
-        elif args.model == "unet_pancreas":
-            logger.info('Running unet_pancreas')
-            unet_pancreas(logger=logger)
-        else:
-            logger.error("Invalid model selected")
-            sys.exit(1)
+        run_models(model, logger, job_id=job_id)
+        
     # Calculate elapsed time
     elapsed_time = time.time() - start_time
     logger.info(f"Elapsed time: {elapsed_time:.2f} seconds")
     logger.info('Finished running the code')
+
+def run_models(model, logger, job_id):
+    if model == "unet_spleen":
+        logger.info('Running unet_spleen')
+        unet_spleen(logger=logger, job_id=job_id)
+    elif model == "unet_liver":
+        logger.info('Running unet_liver')
+        unet_liver(logger=logger)
+    elif model == "unet_pancreas":
+        logger.info('Running unet_pancreas')
+        unet_pancreas(logger=logger)
+    else:
+        logger.error("Invalid model selected")
+        sys.exit(1)
     
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run U-Net  MSD")
