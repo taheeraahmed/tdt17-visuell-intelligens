@@ -2,8 +2,8 @@
 
 # Generate a unique identifier
 UNIQUE_ID=$(date +%Y%m%d-%H%M%S)
-AUGMENTATION="rand_gamma" # "rand_affine", "rand_noise", "rand_gamma"
-MODEL="unet_spleen"       # "unet_spleen", "unet_liver", "unet_pancreas"
+AUGMENTATION="baseline" # "rand_affine", "rand_noise", "rand_gamma", "baseline"
+MODEL="unetr_spleen"       # "unet_spleen", "unet_liver", "unet_pancreas"
 
 JOB_NAME="${AUGMENTATION}-${MODEL}-${UNIQUE_ID}"
 OUTPUT_FILE="/cluster/home/taheeraa/runs/idun_out/${AUGMENTATION}-${MODEL}-${UNIQUE_ID}.out"
