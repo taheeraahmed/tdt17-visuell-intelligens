@@ -2,14 +2,14 @@
 
 # Generate a unique identifier
 UNIQUE_ID=$(date +%Y%m%d-%H%M%S)
-AUGMENTATION="rand_noise" # "rand_affine", "rand_noise", "rand_gamma"
+AUGMENTATION="rand_gamma" # "rand_affine", "rand_noise", "rand_gamma"
 MODEL="unet_spleen"       # "unet_spleen", "unet_liver", "unet_pancreas"
 
 JOB_NAME="${AUGMENTATION}-${MODEL}-${UNIQUE_ID}"
-OUTPUT_FILE="/cluster/home/taheeraa/idun_out/${AUGMENTATION}-${MODEL}-${UNIQUE_ID}.out"
+OUTPUT_FILE="/cluster/home/taheeraa/runs/idun_out/${AUGMENTATION}-${MODEL}-${UNIQUE_ID}.out"
 
 # Define the destination path for the code
-CODE_PATH="/cluster/home/taheeraa/runs/$AUGMENTATION-$MODEL-$UNIQUE_ID"
+CODE_PATH="/cluster/home/taheeraa/runs/code/$AUGMENTATION-$MODEL-$UNIQUE_ID"
 
 # Copy the code with rsync, excluding .venv
 echo "Copying code to $CODE_PATH"
