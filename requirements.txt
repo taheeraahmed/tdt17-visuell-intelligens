@@ -8,3 +8,4 @@ fastMONAI
 scikit-learn
 codecarbon
 pyfiglet
+einops

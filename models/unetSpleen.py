@@ -50,7 +50,6 @@ def unet_spleen(logger,  model_arg, unique_id=0, augmentation="none"):
     else:
         pass
     logger.info(f'{item_tfms}')
-
     dblock = MedDataBlock(
         blocks=(ImageBlock(cls=MedImage), MedMaskBlock), 
         splitter=RandomSplitter(seed=42), 

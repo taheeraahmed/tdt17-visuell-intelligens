@@ -16,7 +16,10 @@ def main(args):
     logger, project_root = set_up(model=model, unique_id=unique_id, augmentations=augmentation)
     sys.path.append(project_root)
     
-    logger.info(f"Job ID: {unique_id}")
+    job_id = args.id
+    model = args.model
+    version = args.version
+    logger.info(f"Job ID: {job_id}")
     
     start_time = time.time()
     
