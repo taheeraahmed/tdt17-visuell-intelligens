@@ -27,7 +27,7 @@ def unet_spleen(logger, unique_id=0, augmentation=None):
     n_classes = len(codes)
 
     logger.info('MedData stuff..')
-    bs=4
+    bs=2
     size=[512,512,128]
     med_dataset = MedDataset(img_list=train_df.label.tolist(), dtype=MedMask, max_workers=12)
     resample, reorder = med_dataset.suggestion()
