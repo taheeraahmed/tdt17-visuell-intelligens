@@ -50,15 +50,21 @@ def unet_pancreas(logger, version):
     print("Voxel value for dim_0, dim_1 and dim_2: ", resample)
     print("Should reorder data: ", reorder)
 
-    item_tfms = []
-    if (version == 'no_augmentaion' | version=='UNETR'):
-        item_tfms = [ZNormalization(), PadOrCrop(size)] #Data augmentation
-    elif (version == 'RandomAffine'):
-        item_tfms = [ZNormalization(), PadOrCrop(size), RandomAffine(degrees=15, translation=15) ] #Data augmentation
-    elif (version == 'RandomGamma'):
-        item_tfms = [ZNormalization(), PadOrCrop(size), RandomGamma()] #Data augmentation
-    elif (version == 'RandomNoise'):
-        item_tfms = [ZNormalization(), PadOrCrop(size), RandomNoise()] #Data augmentation
+    logger.info('Adding augmentations')
+    random_affine = RandomAffine(degrees=15, translation=15)
+    random_gamma = RandomGamma()
+    random_noise = RandomNoise()
+    item_tfms = [ZNormalization(), PadOrCrop(size)]
+
+    if version == 'RandomAffine':
+        item_tfms.append(random_affine)
+    elif version == 'RandomGamma':
+        item_tfms.append(random_gamma)
+    elif version == 'RandomNoise':
+        item_tfms.append(random_noise)
+    else:
+        pass
+    logger.info(f'{item_tfms}')
 
     # item_tfms = [ZNormalization(), PadOrCrop(size), RandAffined(keys=['image', 'label'], mode=('bilinear', 'nearest'), shear_range=(0.5, 0.5), translate_range=(15,15))] #Data augmentation
 
