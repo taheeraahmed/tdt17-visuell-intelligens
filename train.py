@@ -37,7 +37,7 @@ def main(args):
 def run_models(model, logger, unique_id, augmentation):
     logger.info(f'Running {model} w/{augmentation}')
 
-    if model == "unet_spleen":
+    if model == "unet_spleen" or "unetr_spleen":
         unet_spleen(logger=logger, unique_id=unique_id, augmentation=augmentation, model_arg=model)
     elif model == "unet_liver":
         unet_liver(logger=logger, unique_id=unique_id, augmentation=augmentation, model_arg=model)
