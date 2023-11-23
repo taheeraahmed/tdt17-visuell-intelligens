@@ -5,8 +5,8 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --mem=30G
-#SBATCH --job-name="tdt017-franky-boi-give-us-a"
-#SBATCH --output=idun/23-11-23-09-06-rand-gamma-1-gpu.out
+#SBATCH --job-name="${AUGMENTATION}-${MODEL}-${UNIQUE_ID}"
+#SBATCH --output="idun/${AUGMENTATION}-${MODEL}-${UNIQUE_ID}.out"
 #SBATCH --gres=gpu:1
 
 echo "We are running from this directory: $SLURM_SUBMIT_DIR"

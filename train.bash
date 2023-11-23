@@ -6,7 +6,7 @@ AUGMENTATION="rand_affine"
 MODEL="unet_spleen"
 
 # Define the destination path for the code
-CODE_PATH="/cluster/home/taheeraa/runs/$AUGMENTATION-$UNIQUE_ID"
+CODE_PATH="/cluster/home/taheeraa/runs/$AUGMENTATION-$MODEL-$UNIQUE_ID"
 
 # Copy the code with rsync, excluding .venv
 echo "Copying code to $CODE_PATH"
