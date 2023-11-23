@@ -6,10 +6,13 @@ from pandas import DataFrame
 import numpy as np
 from helpers.create_dir import create_directory_if_not_exists
 from monai.losses import DiceCELoss
-from monai.networks.nets import UNet
+from monai.networks.nets import (
+    UNet,
+    UNETR
+)
 import sys
 
-def unet_spleen(logger,  model_arg, unique_id=0, augmentation=None):
+def unet_spleen(logger,  model_arg, unique_id=0, augmentation="none"):
     path = f'/cluster/home/taheeraa/runs/output/{unique_id}'
     create_directory_if_not_exists(path)
     task = 'Task09_Spleen'

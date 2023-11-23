@@ -51,7 +51,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run U-Net  MSD")
     parser.add_argument("-id", "--id", help="Unique-ID from train.bash", default=0, required=False)
     parser.add_argument("-m", "--model", choices=["unet_spleen", "unet_liver", "unet_pancreas", "unetr_spleen"], help="Model to run", required=True)
-    parser.add_argument("-a", "--augmentation", choices=["rand_affine", "rand_noise", "rand_gamma"], help="Data augmentations", required=False, default=None)
+    parser.add_argument("-a", "--augmentation", choices=["rand_affine", "rand_noise", "rand_gamma", "baseline"], help="Data augmentations", required=False, default="baseline")
    
     args = parser.parse_args()
     main(args)
