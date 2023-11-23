@@ -15,12 +15,10 @@ def main(args):
 
     logger, project_root = set_up(model=model, unique_id=unique_id, augmentations=augmentation)
     sys.path.append(project_root)
-    
-    job_id = args.id
-    model = args.model
-    version = args.version
-    logger.info(f"Job ID: {job_id}")
-    
+
+    logger.info(f"Unique id: {unique_id}")
+    logger.info(f'Running {model} w/augmentations')
+
     start_time = time.time()
     
     if check_nvml_error(logger=logger) == 0:
@@ -37,15 +35,14 @@ def main(args):
     logger.info('Finished running the code')
 
 def run_models(model, logger, unique_id, augmentation):
+    logger.info(f'Running {model} w/{augmentation}')
+
     if model == "unet_spleen":
-        logger.info(f'Running {model} w/{augmentation}')
         unet_spleen(logger=logger, unique_id=unique_id, augmentation=augmentation, model_arg=model)
     elif model == "unet_liver":
-        logger.info(f'Running {model}')
-        unet_liver(logger=logger)
+        unet_liver(logger=logger, unique_id=unique_id, augmentation=augmentation, model_arg=model)
     elif model == "unet_pancreas":
-        logger.info(f'Running {model}')
-        unet_pancreas(logger=logger)
+        unet_pancreas(logger=logger, unique_id=unique_id, augmentation=augmentation, model_arg=model)
     else:
         logger.error("Invalid model selected")
         sys.exit(1)
