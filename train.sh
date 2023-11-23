@@ -18,4 +18,4 @@ rsync -av --exclude='.venv' --exclude='logs' --exclude='idun' --exclude='emissio
 
 # Submit the job to SLURM with the necessary environment variables
 echo "Running slurm job from $CODE_PATH"
-sbatch --partition=GPUQ --account=ie-idi --time=20:00:00 --nodes=1 --ntasks-per-node=1 --mem=30G --gres=gpu:1 --job-name=$JOB_NAME --output=$OUTPUT_FILE --export=UNIQUE_ID=$UNIQUE_ID,AUGMENTATION=$AUGMENTATION,MODEL=$MODEL,CODE_PATH=$CODE_PATH $CODE_PATH/unetSpleen.slurm
+sbatch --partition=GPUQ --account=ie-idi --time=20:00:00 --nodes=1 --ntasks-per-node=1 --mem=50G --gres=gpu:1 --job-name=$JOB_NAME --output=$OUTPUT_FILE --export=UNIQUE_ID=$UNIQUE_ID,AUGMENTATION=$AUGMENTATION,MODEL=$MODEL,CODE_PATH=$CODE_PATH $CODE_PATH/unetSpleen.slurm
