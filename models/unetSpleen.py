@@ -9,7 +9,7 @@ from monai.losses import DiceCELoss
 from monai.networks.nets import UNet
 import sys
 
-def unet_spleen(logger, unique_id=0, augmentation=None):
+def unet_spleen(logger,  model_arg, unique_id=0, augmentation=None):
     path = f'/cluster/home/taheeraa/runs/output/{unique_id}'
     create_directory_if_not_exists(path)
     task = 'Task09_Spleen'
@@ -63,7 +63,10 @@ def unet_spleen(logger, unique_id=0, augmentation=None):
     logger.info(f'Figure has been stored at path: {path}')
     logger.info('Done with MedData stuff..')
 
-    model = UNet(spatial_dims=3, in_channels=1, out_channels=n_classes, channels=(16, 32, 64, 128, 256),strides=(2, 2, 2, 2), num_res_units=2)
+    if (model_arg == 'unetr_spleen'):
+        model = UNETR(spatial_dims=3, in_channels=1, out_channels=n_classes, img_size=size)
+    elif model=="unet_spleen":
+        model = UNet(spatial_dims=3, in_channels=1, out_channels=n_classes, channels=(16, 32, 64, 128, 256),strides=(2, 2, 2, 2), num_res_units=2)
     
     loss_func = CustomLoss(loss_func=DiceCELoss(to_onehot_y=True, include_background=True, softmax=True))
 

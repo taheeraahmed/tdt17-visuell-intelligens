@@ -36,7 +36,7 @@ def main(args):
 def run_models(model, logger, unique_id, augmentation):
     if model == "unet_spleen":
         logger.info(f'Running {model} w/{augmentation}')
-        unet_spleen(logger=logger, unique_id=unique_id, augmentation=augmentation)
+        unet_spleen(logger=logger, unique_id=unique_id, augmentation=augmentation, model_arg=model)
     elif model == "unet_liver":
         logger.info(f'Running {model}')
         unet_liver(logger=logger)
@@ -50,7 +50,7 @@ def run_models(model, logger, unique_id, augmentation):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run U-Net  MSD")
     parser.add_argument("-id", "--id", help="Unique-ID from train.bash", default=0, required=False)
-    parser.add_argument("-m", "--model", choices=["unet_spleen", "unet_liver", "unet_pancreas"], help="Model to run", required=True)
+    parser.add_argument("-m", "--model", choices=["unet_spleen", "unet_liver", "unet_pancreas", "unetr_spleen"], help="Model to run", required=True)
     parser.add_argument("-a", "--augmentation", choices=["rand_affine", "rand_noise", "rand_gamma"], help="Data augmentations", required=False, default=None)
    
     args = parser.parse_args()
