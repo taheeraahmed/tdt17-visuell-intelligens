@@ -13,8 +13,8 @@ from monai.networks.nets import (
     UNETR
 )
 
-def unet_pancreas(logger, version):
-    v =  "v1" if version == "no_augmentaion" else "v2" if version == "RandomAffine" else "v3" if version == "RandomGamma" else "v4" if version == "RandomNoise" else "UNETR"
+def unet_pancreas(logger, augmentation, model_arg):
+    v =  "v1" if augmentation == "baseline" else "v2" if augmentation == "rand_affine" else "v3" if augmentation == "rand_gamma" else "v4" if augmentation == "rand_noise" else model_arg
     print(v)
     pd.set_option('display.max_columns', None)
 
