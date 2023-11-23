@@ -23,10 +23,10 @@ def main(args):
     if check_nvml_error(logger=logger) == 0:
         logger.info('Code carbon is working B)')
         with EmissionsTracker(project_name=model, log_level="error") as tracker:
-            run_models(model, logger, unique_id=unique_id, augmentations=augmentation)
+            run_models(model, logger, unique_id=unique_id, augmentation=augmentation)
     else: 
         logger.warning('Dropped carbon tracker :/')
-        run_models(model, logger, unique_id=unique_id, augmentations=augmentation)
+        run_models(model, logger, unique_id=unique_id, augmentation=augmentation)
         
     # Calculate elapsed time
     elapsed_time = time.time() - start_time
