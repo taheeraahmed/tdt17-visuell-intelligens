@@ -32,6 +32,7 @@ def unet_spleen(logger,  model_arg, unique_id=0, augmentation="none"):
     logger.info('MedData stuff..')
     bs=1
     size=[512, 512, 128]
+    logger.info(f'batch size: {bs}, size: {size}')
     med_dataset = MedDataset(img_list=train_df.label.tolist(), dtype=MedMask, max_workers=12)
     resample, reorder = med_dataset.suggestion()
 
@@ -74,11 +75,12 @@ def unet_spleen(logger,  model_arg, unique_id=0, augmentation="none"):
 
     logger.info('Running learner and lr_find')
     learn = Learner(dls, model, loss_func=loss_func, opt_func=ranger, metrics=multi_dice_score)#.to_fp16()
+    lr = learn.lr_find()
     plt.savefig(path+'/task09-spleen-lr-find.png')
     logger.info(f'Figure has been stored at path: {path}/task09-spleen-lr-find.png')
-
+    
     logger.info('Learn-fit-flat')
-    learn.fit_flat_cos(1, 1e-3)
+    learn.fit_flat_cos(1, lr)
 
     learn.save('spleen-model')
     logger.info(f'Model has been stored at path: {path}/spleen-model.pth')
