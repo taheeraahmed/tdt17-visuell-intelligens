@@ -30,8 +30,8 @@ def unet_spleen(logger,  model_arg, unique_id=0, augmentation="none"):
     n_classes = len(codes)
 
     logger.info('MedData stuff..')
-    bs=2
-    size=[512,512,128]
+    bs=1
+    size=[512, 512, 128]
     med_dataset = MedDataset(img_list=train_df.label.tolist(), dtype=MedMask, max_workers=12)
     resample, reorder = med_dataset.suggestion()
 
@@ -65,21 +65,20 @@ def unet_spleen(logger,  model_arg, unique_id=0, augmentation="none"):
     logger.info(f'Figure has been stored at path: {path}')
     logger.info('Done with MedData stuff..')
 
-    if (model_arg == 'unetr_spleen'):
+    if model_arg == 'unetr_spleen':
         model = UNETR(spatial_dims=3, in_channels=1, out_channels=n_classes, img_size=size)
-    elif model=="unet_spleen":
+    elif model_arg=="unet_spleen":
         model = UNet(spatial_dims=3, in_channels=1, out_channels=n_classes, channels=(16, 32, 64, 128, 256),strides=(2, 2, 2, 2), num_res_units=2)
     
     loss_func = CustomLoss(loss_func=DiceCELoss(to_onehot_y=True, include_background=True, softmax=True))
 
     logger.info('Running learner and lr_find')
     learn = Learner(dls, model, loss_func=loss_func, opt_func=ranger, metrics=multi_dice_score)#.to_fp16()
-    lr = learn.lr_find()
     plt.savefig(path+'/task09-spleen-lr-find.png')
     logger.info(f'Figure has been stored at path: {path}/task09-spleen-lr-find.png')
 
     logger.info('Learn-fit-flat')
-    learn.fit_flat_cos(50 ,lr)
+    learn.fit_flat_cos(1, 1e-3)
 
     learn.save('spleen-model')
     logger.info(f'Model has been stored at path: {path}/spleen-model.pth')
@@ -98,12 +97,13 @@ def unet_spleen(logger,  model_arg, unique_id=0, augmentation="none"):
     logger.info('Predicting')
     pred_acts, labels = learn.get_preds(dl=test_dl)
     pred_acts.shape, labels.shape
-    multi_dice_score(pred_acts, labels)
+    logger.info(f'{multi_dice_score(pred_acts, labels)}')
     learn.show_results(anatomical_plane=0, dl=test_dl)
     plt.savefig(path + '/task09-show-results.png')  # Replace with your desired file path and name
     logger.info(f'Figure has been stored at path: {path}/task09-show-results.png')
 
-    store_variables(pkl_fn='vars.pkl', size=size, reorder=reorder,  resample=resample)
-    learn.export(path + '/model.pkl')
+    store_variables(pkl_fn=f'{path}/vars.pkl', size=size, reorder=reorder, resample=resample)
+    logger.info(f'Exported vars file: {path}/vars.pkl')
+    learn.export(f'{path}/model.pkl')
 
     logger.info(f'Exported pickle file: {path}/model.pkl')
