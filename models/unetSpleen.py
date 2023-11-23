@@ -10,7 +10,7 @@ from monai.networks.nets import UNet
 import sys
 
 def unet_spleen(logger, unique_id=0, augmentation=None):
-    path = f'./output/{unique_id}'
+    path = f'/cluster/home/taheeraa/runs/output/{unique_id}'
     create_directory_if_not_exists(path)
     task = 'Task09_Spleen'
 
