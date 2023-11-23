@@ -13,7 +13,9 @@ from monai.networks.nets import (
     UNETR
 )
 
-def unet_pancreas(logger):
+def unet_pancreas(logger, version):
+    v =  "v1" if version == "no_augmentaion" else "v2" if version == "RandomAffine" else "v3" if version == "RandomGamma" else "v4" if version == "RandomNoise" else "UNETR"
+    print(v)
     pd.set_option('display.max_columns', None)
 
     result = pyfiglet.figlet_format("VI babes", font = "slant"  ) 
@@ -48,11 +50,15 @@ def unet_pancreas(logger):
     print("Voxel value for dim_0, dim_1 and dim_2: ", resample)
     print("Should reorder data: ", reorder)
 
-    
-    item_tfms = [ZNormalization(), PadOrCrop(size)] #Data augmentation
-    # item_tfms = [ZNormalization(), PadOrCrop(size), RandomAffine(degrees=15, translation=15) ] #Data augmentation
-    # item_tfms = [ZNormalization(), PadOrCrop(size), RandomGamma()] #Data augmentation
-    # item_tfms = [ZNormalization(), PadOrCrop(size), RandomNoise()] #Data augmentation
+    item_tfms = []
+    if (version == 'no_augmentaion' | version=='UNETR'):
+        item_tfms = [ZNormalization(), PadOrCrop(size)] #Data augmentation
+    elif (version == 'RandomAffine'):
+        item_tfms = [ZNormalization(), PadOrCrop(size), RandomAffine(degrees=15, translation=15) ] #Data augmentation
+    elif (version == 'RandomGamma'):
+        item_tfms = [ZNormalization(), PadOrCrop(size), RandomGamma()] #Data augmentation
+    elif (version == 'RandomNoise'):
+        item_tfms = [ZNormalization(), PadOrCrop(size), RandomNoise()] #Data augmentation
 
     # item_tfms = [ZNormalization(), PadOrCrop(size), RandAffined(keys=['image', 'label'], mode=('bilinear', 'nearest'), shear_range=(0.5, 0.5), translate_range=(15,15))] #Data augmentation
 
@@ -61,41 +67,43 @@ def unet_pancreas(logger):
     dls = dblock.dataloaders(train_df, bs=bs)
     print('Length of traning data: ',len(dls.train_ds.items), 'Length of validation data: ', len(dls.valid_ds.items))
     dls.show_batch(anatomical_plane=0, slice_index=20)
-    plt.savefig('models/Pancreas/v1/images/Examples_of_data_pancreas_slice.png')
+    plt.savefig(f'models/Pancreas/{v}/images/Examples_of_data_pancreas_slice.png')
     plt.close()
     dls.show_batch(anatomical_plane=0)
-    plt.savefig('models/Pancreas/v1/images/Examples_of_data_pancreas.png')
+    plt.savefig(f'models/Pancreas/{v}/images/Examples_of_data_pancreas.png')
     plt.close()
     dls.show_batch(anatomical_plane=1)
-    plt.savefig('models/Pancreas/v1/images/Examples_of_data_pancreas_ap1.png')
+    plt.savefig(f'models/Pancreas/{v}/images/Examples_of_data_pancreas_ap1.png')
     plt.close()
     logger.info('Done with cache and data augmentation..')
 
-    model = v1(spatial_dims=3, in_channels=1, out_channels=n_classes, img_size=size)
-    # model = UNet(spatial_dims=3, in_channels=1, out_channels=n_classes, channels=(16, 32, 64, 128, 256),strides=(2, 2, 2, 2), num_res_units=2)
+    if (version == 'UNETR'):
+        model = UNETR(spatial_dims=3, in_channels=1, out_channels=n_classes, img_size=size)
+    else:
+        model = UNet(spatial_dims=3, in_channels=1, out_channels=n_classes, channels=(16, 32, 64, 128, 256),strides=(2, 2, 2, 2), num_res_units=2)
     loss_func = CustomLoss(loss_func=DiceCELoss(to_onehot_y=True, include_background=True, softmax=True))
 
     logger.info('Learning rate')
     learn = Learner(dls, model, loss_func=loss_func, opt_func=ranger, metrics=multi_dice_score)#.to_fp16()
     lr = learn.lr_find() #set learning rate?
     print('learning rate', lr)
-    plt.savefig('models/Pancreas/v1/images/learning.png')
+    plt.savefig(f'models/Pancreas/{v}/images/learning.png')
     plt.close()
     epochs=50
     logger.info('Training')
     learn.fit_flat_cos(epochs, lr)
-    learn.save('Pancreas/v1/models/trained.Pancreas-model')
+    learn.save(f'Pancreas/{v}/models/trained.Pancreas-model')
 
     logger.info('Results from training')
     learn.show_results(anatomical_plane=0, ds_idx=1)
-    plt.savefig('models/Pancreas/v1/images/result_training_pancreas.png')
+    plt.savefig(f'models/Pancreas/{v}/images/result_training_pancreas.png')
     plt.close()
 
     logger.info('Testing')
-    learn.load('Pancreas/v1/models/trained.Pancreas-model')
+    learn.load(f'Pancreas/{v}/models/trained.Pancreas-model')
     test_dl = learn.dls.test_dl(test_df[:10],with_labels=True)
     test_dl.show_batch(anatomical_plane=0, figsize=(10,10))
-    plt.savefig('models/Pancreas/v1/images/result_testing_pancreas.png')
+    plt.savefig(f'models/Pancreas/{v}/images/result_testing_pancreas.png')
     plt.close()
 
 
@@ -104,10 +112,10 @@ def unet_pancreas(logger):
     print('predicted shape: ', pred_acts.shape, 'Label shape', labels.shape)
     print('Dice score for label_1 and label 2: ',multi_dice_score(pred_acts, labels))
     learn.show_results(anatomical_plane=0, dl=test_dl)
-    plt.savefig('models/Pancreas/v1/images/result_training.png')
+    plt.savefig(f'models/Pancreas/{v}/images/result_training.png')
     plt.close()
 
     logger.info('Export')
-    learn.export('Pancreas/v1/models/pancreas_model.pkl')
+    learn.export(f'Pancreas/{v}/models/pancreas_model.pkl')
     # logger.info('Did not save trained model')
 
