@@ -8,13 +8,14 @@ import argparse
 from codecarbon import EmissionsTracker
 import time 
 
-def main(args):
-    logger, project_root = set_up()
-    sys.path.append(project_root)
-    
+def main(args):    
     unique_id = args.id
     model = args.model
     augmentation = args.augmentation
+
+    logger, project_root = set_up(model=model, unique_id=unique_id, augmentations=augmentation)
+    sys.path.append(project_root)
+    
     logger.info(f"Job ID: {unique_id}")
     
     start_time = time.time()
