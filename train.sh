@@ -14,7 +14,7 @@ CODE_PATH="/cluster/home/taheeraa/runs/code/$AUGMENTATION-$MODEL-$UNIQUE_ID"
 # Copy the code with rsync, excluding .venv
 echo "Copying code to $CODE_PATH"
 mkdir -p $CODE_PATH
-rsync -av --exclude='.venv' --exclude='logs' --exclude='idun' --exclude='emissions.csv' --exclude='notebooks' --exclude='outputs' --exclude='models/__pycache__' --exclude='helpers/__pycache__' --exclude='.git' /cluster/home/taheeraa/code/tdt17-visuell-intelligens/ $CODE_PATH
+rsync -av --exclude='.venv' --exclude='logs' --exclude='models' --exclude='idun' --exclude='emissions.csv' --exclude='notebooks' --exclude='outputs' --exclude='models/__pycache__' --exclude='helpers/__pycache__' --exclude='.git' /cluster/home/taheeraa/code/tdt17-visuell-intelligens/ $CODE_PATH
 
 # Submit the job to SLURM with the necessary environment variables
 echo "Running slurm job from $CODE_PATH"
