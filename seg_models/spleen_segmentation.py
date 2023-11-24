@@ -12,7 +12,7 @@ from monai.networks.nets import (
 )
 import sys
 
-def spleen_segmentation(logger,  model_arg, unique_id=0, augmentation="none"):
+def spleen_segmentation(logger, model_arg, unique_id=0, augmentation="none"):
     bs = 1
     size=[512, 512, 128]
     epochs = 100
