@@ -5,6 +5,7 @@ from monai.apps import DecathlonDataset
 from pandas import DataFrame
 import numpy as np
 from helpers.create_dir import create_directory_if_not_exists
+from helpers.save_metrics_callback import SaveMetricsCallback
 from monai.losses import DiceCELoss
 from monai.networks.nets import (
     UNet,
@@ -12,14 +13,14 @@ from monai.networks.nets import (
 )
 import sys
 
-def spleen_segmentation(logger, model_arg, unique_id=0, augmentation="none"):
+def spleen_segmentation(logger, model_arg, unique_id=0, augmentation="none", task='Task09_Spleen'):
     bs = 1
     size=[512, 512, 128]
     epochs = 100
     logger.info(f'batch size: {bs}, size: {size}, epochs: {epochs}')
     path = f'/cluster/home/taheeraa/runs/output/{unique_id}'
+    logger.info(f'Everything will be stored in: {path}')
     create_directory_if_not_exists(path)
-    task = 'Task09_Spleen'
 
     logger.info(f'Augmentation {augmentation}')
     logger.info('Loading data..')
@@ -79,7 +80,8 @@ def spleen_segmentation(logger, model_arg, unique_id=0, augmentation="none"):
     logger.info(f'Learning rate figure has been stored at path: {path}/task09-spleen-lr-find.png')
     
     logger.info('Learn-fit-flat')
-    learn.fit_flat_cos(epochs, lr)
+    cbs = SaveMetricsCallback(unique_id=unique_id, model_arg=model_arg, augmentation=augmentation, path=path, logger=logger)
+    learn.fit_flat_cos(epochs, lr, cbs=cbs)
 
     learn.save('spleen-model')
     logger.info(f'Model has been stored at path: {path}/spleen-model.pth')
