@@ -13,6 +13,10 @@ from monai.networks.nets import (
 import sys
 
 def unet_spleen(logger,  model_arg, unique_id=0, augmentation="none"):
+    bs = 1
+    size=[512, 512, 128]
+    epochs = 100
+
     path = f'/cluster/home/taheeraa/runs/output/{unique_id}'
     create_directory_if_not_exists(path)
     task = 'Task09_Spleen'
@@ -22,16 +26,12 @@ def unet_spleen(logger,  model_arg, unique_id=0, augmentation="none"):
     data_path = '/cluster/projects/vc/data/mic/open/MSD'                               #IDUN
     #data_path = 'C:\\Users\\Taheera Ahmed\\code\\tdt17-visuell-intelligens\\dataset'    #Locally
     training_data = DecathlonDataset(root_dir=data_path, task=task, section="training", download=False, cache_num=0, num_workers=3)
-    logger.info('Done loading data!')
 
     df = DataFrame(training_data.data)
     train_df, test_df = train_test_split(df, test_size=0.1, random_state=42)
     codes = np.unique(med_img_reader(train_df.label.tolist()[0]))
     n_classes = len(codes)
 
-    logger.info('MedData stuff..')
-    bs=1
-    size=[512, 512, 128]
     logger.info(f'batch size: {bs}, size: {size}')
     med_dataset = MedDataset(img_list=train_df.label.tolist(), dtype=MedMask, max_workers=12)
     resample, reorder = med_dataset.suggestion()
@@ -50,7 +50,7 @@ def unet_spleen(logger,  model_arg, unique_id=0, augmentation="none"):
         item_tfms.append(random_noise)
     else:
         pass
-    logger.info(f'{item_tfms}')
+    logger.info(f'Added these augmentations: {item_tfms}')
     dblock = MedDataBlock(
         blocks=(ImageBlock(cls=MedImage), MedMaskBlock), 
         splitter=RandomSplitter(seed=42), 
@@ -63,8 +63,8 @@ def unet_spleen(logger,  model_arg, unique_id=0, augmentation="none"):
     dls = dblock.dataloaders(train_df, bs=bs)
     dls.show_batch(anatomical_plane=0)
     plt.savefig(path+'/task09-dls.png') 
-    logger.info(f'Figure has been stored at path: {path}')
-    logger.info('Done with MedData stuff..')
+    logger.info(f'Show batches figure has been stored at path: {path}/task09-dls.png')
+    logger.info('Data is loaded..')
 
     if model_arg == 'unetr_spleen':
         model = UNETR(spatial_dims=3, in_channels=1, out_channels=n_classes, img_size=size)
@@ -77,16 +77,16 @@ def unet_spleen(logger,  model_arg, unique_id=0, augmentation="none"):
     learn = Learner(dls, model, loss_func=loss_func, opt_func=ranger, metrics=multi_dice_score)#.to_fp16()
     lr = learn.lr_find()
     plt.savefig(path+'/task09-spleen-lr-find.png')
-    logger.info(f'Figure has been stored at path: {path}/task09-spleen-lr-find.png')
+    logger.info(f'Learning rate figure has been stored at path: {path}/task09-spleen-lr-find.png')
     
     logger.info('Learn-fit-flat')
-    learn.fit_flat_cos(1, lr)
+    learn.fit_flat_cos(epochs, lr)
 
     learn.save('spleen-model')
     logger.info(f'Model has been stored at path: {path}/spleen-model.pth')
     learn.show_results(anatomical_plane=0, ds_idx=1)
     plt.savefig(path +'/task09-show-results.png')  # Replace with your desired file path and name
-    logger.info(f'Figure has been stored at path: {path}/task09-show-results.png')
+    logger.info(f'Results figure has been stored at path: {path}/task09-show-results.png')
 
 
     learn.load('spleen-model');
@@ -94,15 +94,15 @@ def unet_spleen(logger,  model_arg, unique_id=0, augmentation="none"):
     test_dl = learn.dls.test_dl(test_df[:10],with_labels=True)
     test_dl.show_batch(anatomical_plane=0, figsize=(10,10))
     plt.savefig(path + '/task09-show-batch.png')
-    logger.info(f'Figure has been stored at path: {path}/task09-show-batch.png')
+    logger.info(f'Test batch figures has been stored at path: {path}/task09-show-batch.png')
 
     logger.info('Predicting')
     pred_acts, labels = learn.get_preds(dl=test_dl)
     pred_acts.shape, labels.shape
     logger.info(f'{multi_dice_score(pred_acts, labels)}')
     learn.show_results(anatomical_plane=0, dl=test_dl)
-    plt.savefig(path + '/task09-show-results.png')  # Replace with your desired file path and name
-    logger.info(f'Figure has been stored at path: {path}/task09-show-results.png')
+    plt.savefig(path + '/task09-test-results.png')  # Replace with your desired file path and name
+    logger.info(f'Test results figure has been stored at path: {path}/task09-test-results.png')
 
     store_variables(pkl_fn=f'{path}/vars.pkl', size=size, reorder=reorder, resample=resample)
     logger.info(f'Exported vars file: {path}/vars.pkl')
