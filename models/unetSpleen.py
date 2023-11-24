@@ -16,7 +16,7 @@ def unet_spleen(logger,  model_arg, unique_id=0, augmentation="none"):
     bs = 1
     size=[512, 512, 128]
     epochs = 100
-
+    logger.info(f'batch size: {bs}, size: {size}, epochs: {epochs}')
     path = f'/cluster/home/taheeraa/runs/output/{unique_id}'
     create_directory_if_not_exists(path)
     task = 'Task09_Spleen'
@@ -32,7 +32,6 @@ def unet_spleen(logger,  model_arg, unique_id=0, augmentation="none"):
     codes = np.unique(med_img_reader(train_df.label.tolist()[0]))
     n_classes = len(codes)
 
-    logger.info(f'batch size: {bs}, size: {size}')
     med_dataset = MedDataset(img_list=train_df.label.tolist(), dtype=MedMask, max_workers=12)
     resample, reorder = med_dataset.suggestion()
 
