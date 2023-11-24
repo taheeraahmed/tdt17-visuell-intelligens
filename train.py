@@ -1,8 +1,8 @@
 from helpers.set_up import set_up
 from helpers.check_nvml_error import check_nvml_error
-from models.unetSpleen import unet_spleen
-from models.unetLiver import unet_liver
-from models.unetPancreas import unet_pancreas
+from seg_models.spleen_segmentation import spleen_segmentation
+from seg_models.unetLiver import unet_liver
+from seg_models.unetPancreas import unet_pancreas
 import sys
 import argparse
 from codecarbon import EmissionsTracker
@@ -38,7 +38,7 @@ def run_models(model, logger, unique_id, augmentation):
     logger.info(f'Running {model} w/{augmentation}')
 
     if model == "unet_spleen" or "unetr_spleen":
-        unet_spleen(logger=logger, unique_id=unique_id, augmentation=augmentation, model_arg=model)
+        spleen_segmentation(logger=logger, unique_id=unique_id, augmentation=augmentation, model_arg=model)
     elif model == "unet_liver":
         unet_liver(logger=logger, unique_id=unique_id, augmentation=augmentation, model_arg=model)
     elif model == "unet_pancreas":
