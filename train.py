@@ -13,7 +13,7 @@ def main(args):
     model = args.model
     augmentation = args.augmentation
 
-    logger, project_root = set_up(model=model, unique_id=unique_id, augmentation=augmentation)
+    logger, project_root = set_up(model=model, unique_id=unique_id, augmentations=augmentation)
     sys.path.append(project_root)
 
     logger.info(f"Unique id: {unique_id}")
