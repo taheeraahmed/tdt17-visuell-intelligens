@@ -23,7 +23,7 @@ def main(args):
     
     if check_nvml_error(logger=logger) == 0:
         logger.info('Code carbon is working B)')
-        with EmissionsTracker(project_name=model, log_level="error") as tracker:
+        with EmissionsTracker(project_name=f"{model}-{augmentation}", log_level="error") as tracker:
             run_models(model, logger, unique_id=unique_id, augmentation=augmentation)
     else: 
         logger.warning('Dropped carbon tracker :/')
