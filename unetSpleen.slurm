@@ -24,6 +24,6 @@ pip install -q -r requirements.txt
 echo "--- Running python-script ---"
 echo "Running python script with Model: $MODEL and Augmentation: $AUGMENTATION"
 echo "Path to code: $CODE_PATH"
-python $CODE_PATH/train.py -id $AUGMENTATION-$UNIQUE_ID -m $MODEL -a $AUGMENTATION
+python $CODE_PATH/train.py -id $AUGMENTATION-$UNIQUE_ID -m $MODEL -a $AUGMENTATION -u $USER
 
 echo " --- Done running train.py ---"

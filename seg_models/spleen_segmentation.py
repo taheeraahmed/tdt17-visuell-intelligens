@@ -12,19 +12,18 @@ from monai.networks.nets import (
 )
 import sys
 
-def spleen_segmentation(logger, model_arg, unique_id=0, augmentation="none"):
+def spleen_segmentation(logger, model_arg, user, unique_id=0, augmentation="none"):
     bs = 1
     size=[512, 512, 128]
     epochs = 100
     logger.info(f'batch size: {bs}, size: {size}, epochs: {epochs}')
-    path = f'/cluster/home/taheeraa/runs/output/{unique_id}'
+    path = f'/cluster/home/{user}/runs/output/{unique_id}'
     create_directory_if_not_exists(path)
     task = 'Task09_Spleen'
 
     logger.info(f'Augmentation {augmentation}')
     logger.info('Loading data..')
     data_path = '/cluster/projects/vc/data/mic/open/MSD'                               #IDUN
-    #data_path = 'C:\\Users\\Taheera Ahmed\\code\\tdt17-visuell-intelligens\\dataset'    #Locally
     training_data = DecathlonDataset(root_dir=data_path, task=task, section="training", download=False, cache_num=0, num_workers=3)
 
     df = DataFrame(training_data.data)
