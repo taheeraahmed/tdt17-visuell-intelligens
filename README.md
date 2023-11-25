@@ -3,9 +3,51 @@
 To run this code you need to be on the cluster IDUN at NTNU and clone this repository. 
 You can change the arguments in the train.sh file to run the different tasks. 
 
-```
-./train.sh
-```
+## 🌟 Overview
+This script is designed for submitting a job to a SLURM-based cluster for medical image processing tasks 🖥️. It primarily focuses on UNET-based models for organ segmentation tasks such as spleen, liver, and pancreas 🏥.
+
+### Models used
+- **UNETR:** For 3D image segmentation with transformers.
+- **UNet:** A convolutional network for biomedical image segmentation.
+
+## 🛠️ Usage
+1. **Set Parameters:**
+   - `AUGMENTATION`: Choose the type of augmentation (`baseline`, `rand_affine`, `rand_noise`, `rand_gamma`) 🎛️.
+   - `MODEL`: Select the model (`unet_spleen`, `unet_liver`, `unet_pancreas`, `unetr_spleen`) 🧬.
+
+2. **Run the Script:**
+   - Execute the script in a Bash environment: `./train.sh`.
+   - The script will automatically perform the following steps:
+     - Generate a unique identifier 🆔.
+     - Define the job name and output file path 📝.
+     - Define and prepare the code path 🛤️.
+     - Copy the necessary code to the cluster 🔄.
+     - Submit the job to the SLURM scheduler with the configured environment variables 🚀.
+
+## 📚 Libraries and Frameworks
+- **Matplotlib:** For plotting and saving figures.
+- **fastMONAI:** A high-level API for medical image analysis, extending MONAI capabilities.
+- **Scikit-Learn:** Used for splitting datasets into training and testing sets.
+- **Pandas:** For data manipulation and analysis.
+- **NumPy:** For handling large, multi-dimensional arrays and matrices.
+- **MONAI:** Specifically for medical image informatics, providing models like UNet and UNETR.
+- **Helpers:** Custom utility functions for directory creation and data transformations.
+
+## 🚀 Features
+- **Unique Job Identification:** Generates a unique identifier based on the current date and time 🕒.
+- **Model and Augmentation Selection:** Allows the user to choose between different models and augmentation techniques 🔄.
+- **Code Synchronization:** Utilizes `rsync` to copy the relevant code to the destination path, excluding unnecessary files and directories 📁.
+- **Job Submission:** Submits the job to the SLURM scheduler with specified resources and settings ⚙️.
+
+## 📋 Prerequisites
+- Access to a SLURM-based cluster 🖥️.
+- Required directory structure and files on the cluster 📚.
+
+## 📝 Notes
+- Ensure that the paths and modules are correctly set up in your cluster environment 🔧.
+- Modify the SLURM parameters as needed to suit the cluster configuration and job requirements 🛠️.
+
+# MSD Dataset 
 
 ## Overview of tasks
 
@@ -24,7 +66,7 @@ You can change the arguments in the train.sh file to run the different tasks.
 | 09          | Spleen             |
 | 10          | Colon              |
 
-## How to run notebook on IDUN 😮‍💨
+# How to run notebook on IDUN 😮‍💨
 
 (1) Log in to IDUN
 
