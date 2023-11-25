@@ -24,5 +24,5 @@ module load Python/3.10.8-GCCcore-12.2.0
 source .venv/bin/activate
 pip install -q -r requirements.txt
 echo "--- Running python-script ---"
-python train.py -id $SLURM_JOB_ID -m "unet_spleen"
+python train.py -id $SLURM_JOB_ID -m "unet_spleen" -v "no_augmentaion"
 echo " --- Done running train.py ---"

@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-from fastMONAI.vision_all import med_img_reader, MedDataset, MedMask, PadOrCrop, RandomAffine, MedMaskBlock, MedImage, RandomSplitter, ColReader, ImageBlock, ZNormalization, MedDataBlock, CustomLoss, multi_dice_score, ranger, Learner, store_variables
+from fastMONAI.vision_all import med_img_reader, MedDataset, MedMask, PadOrCrop, RandomAffine, MedMaskBlock, MedImage, RandomSplitter, ColReader, ImageBlock, ZNormalization, MedDataBlock, CustomLoss, multi_dice_score, ranger, Learner, store_variables, RandomGamma, RandomNoise
 from sklearn.model_selection import train_test_split
 from monai.apps import DecathlonDataset
 from pandas import DataFrame
@@ -9,7 +9,7 @@ from monai.losses import DiceCELoss
 from monai.networks.nets import UNet
 import sys
 
-def unet_spleen(logger, job_id=0):
+def unet_spleen(logger, job_id=0, version="none"):
     path = f'./output/{job_id}'
     create_directory_if_not_exists(path)
     task = 'Task09_Spleen'
@@ -33,8 +33,23 @@ def unet_spleen(logger, job_id=0):
     size=[512,512,128]
     med_dataset = MedDataset(img_list=train_df.label.tolist(), dtype=MedMask, max_workers=12)
     resample, reorder = med_dataset.suggestion()
-    item_tfms = [ZNormalization(), PadOrCrop(size), RandomAffine(degrees=15, translation=15)]
+
+    logger.info('Adding augmentations')
+    random_affine = RandomAffine(degrees=15, translation=15)
+    random_gamma = RandomGamma()
+    random_noise = RandomNoise()
+    item_tfms = [ZNormalization(), PadOrCrop(size)]
+
+    if version == 'RandomAffine':
+        item_tfms.append(random_affine)
+    elif version == 'RandomGamma':
+        item_tfms.append(random_gamma)
+    elif version == 'RandomNoise':
+        item_tfms.append(random_noise)
+    else:
+        pass
     logger.info(f'{item_tfms}')
+    
     dblock = MedDataBlock(
         blocks=(ImageBlock(cls=MedImage), MedMaskBlock), 
         splitter=RandomSplitter(seed=42), 
