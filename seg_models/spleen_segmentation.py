@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-from fastMONAI.vision_all import med_img_reader, MedDataset, MedMask, MedMaskBlock, MedImage, RandomSplitter, ColReader, ImageBlock, ZNormalization, MedDataBlock, CustomLoss, multi_dice_score, ranger, Learner, store_variables
+from fastMONAI.vision_all import med_img_reader, MedDataset, MedMask, MedMaskBlock, MedImage, RandomSplitter, ColReader, ImageBlock, MedDataBlock, CustomLoss, multi_dice_score, ranger, Learner, store_variables
 from sklearn.model_selection import train_test_split
 from monai.apps import DecathlonDataset
 from pandas import DataFrame
@@ -13,10 +13,10 @@ from monai.networks.nets import (
 )
 import sys
 
-def spleen_segmentation(logger, model_arg, user, unique_id=0, augmentation="none"):
+def spleen_segmentation(logger, model_arg, user, unique_id=0, augmentation="baseline"):
     bs = 1
     size=[512, 512, 128]
-    epochs = 100
+    epochs = 20
     logger.info(f'batch size: {bs}, size: {size}, epochs: {epochs}')
     path = f'/cluster/home/{user}/runs/output/{unique_id}'
     create_directory_if_not_exists(path)
@@ -49,7 +49,7 @@ def spleen_segmentation(logger, model_arg, user, unique_id=0, augmentation="none
     )
     dls = dblock.dataloaders(train_df, bs=bs)
     dls.show_batch(anatomical_plane=0)
-    plt.savefig(path+'/task09-dls.png') 
+    plt.savefig(f'{path}/{task}-dls.png') 
     logger.info(f'Show batches figure has been stored at path: {path}/task09-dls.png')
     logger.info('Data is loaded..')
 
@@ -63,33 +63,33 @@ def spleen_segmentation(logger, model_arg, user, unique_id=0, augmentation="none
     logger.info('Running learner and lr_find')
     learn = Learner(dls, model, loss_func=loss_func, opt_func=ranger, metrics=multi_dice_score)#.to_fp16()
     lr = learn.lr_find()
-    plt.savefig(path+'/task09-spleen-lr-find.png')
-    logger.info(f'Learning rate figure has been stored at path: {path}/task09-spleen-lr-find.png')
+    plt.savefig(f'{path}/{task}-lr-find.png')
+    logger.info(f'Learning rate figure has been stored at path: {path}/{task}-lr-find.png')
     
     logger.info('Learn-fit-flat')
     learn.fit_flat_cos(epochs, lr)
-
-    learn.save('spleen-model')
-    logger.info(f'Model has been stored at path: {path}/spleen-model.pth')
+    learn.save(f'{model_arg}')
+    
+    logger.info(f'Model has been stored at path: {path}/{model_arg}.pth')
     learn.show_results(anatomical_plane=0, ds_idx=1)
-    plt.savefig(path +'/task09-show-results.png')  # Replace with your desired file path and name
-    logger.info(f'Results figure has been stored at path: {path}/task09-show-results.png')
+    plt.savefig(f'{path}/{task}-show-results.png')  # Replace with your desired file path and name
+    logger.info(f'Results figure has been stored at path: {path}/{task}-show-results.png')
 
 
-    learn.load('spleen-model');
-    logger.info(f'Model has been loaded at path: {path}/spleen-model.pth')
+    learn.load(f'{model_arg}');
+    logger.info(f'Model has been loaded at path: {path}/{model_arg}.pth')
     test_dl = learn.dls.test_dl(test_df[:10],with_labels=True)
     test_dl.show_batch(anatomical_plane=0, figsize=(10,10))
-    plt.savefig(path + '/task09-show-batch.png')
-    logger.info(f'Test batch figures has been stored at path: {path}/task09-show-batch.png')
+    plt.savefig(f'{path}/{task}-show-batch.png')
+    logger.info(f'Test batch figures has been stored at path: {path}/{task}-show-batch.png')
 
     logger.info('Predicting')
     pred_acts, labels = learn.get_preds(dl=test_dl)
     pred_acts.shape, labels.shape
     logger.info(f'{multi_dice_score(pred_acts, labels)}')
     learn.show_results(anatomical_plane=0, dl=test_dl)
-    plt.savefig(path + '/task09-test-results.png')  # Replace with your desired file path and name
-    logger.info(f'Test results figure has been stored at path: {path}/task09-test-results.png')
+    plt.savefig(f'{path}/{task}-test-results.png')  # Replace with your desired file path and name
+    logger.info(f'Test results figure has been stored at path: {path}/{task}-test-results.png')
 
     store_variables(pkl_fn=f'{path}/vars.pkl', size=size, reorder=reorder, resample=resample)
     logger.info(f'Exported vars file: {path}/vars.pkl')

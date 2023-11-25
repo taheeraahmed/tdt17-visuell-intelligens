@@ -1,8 +1,8 @@
 from helpers.set_up import set_up
 from helpers.check_nvml_error import check_nvml_error
 from seg_models.spleen_segmentation import spleen_segmentation
-from seg_models.unetLiver import unet_liver
-from seg_models.unetPancreas import unet_pancreas
+from seg_models.liver_segmentation import liver_segmentation
+from seg_models.pancreas_segmentation import pancreas_segmentation
 import sys
 import argparse
 from codecarbon import EmissionsTracker
@@ -38,12 +38,12 @@ def main(args):
 def run_models(model, logger, unique_id, augmentation, user):
     logger.info(f'Running {model} w/{augmentation}')
 
-    if model == "unet_spleen" or "unetr_spleen":
+    if model == "unet_spleen" or model == "unetr_spleen":
         spleen_segmentation(logger=logger, unique_id=unique_id, augmentation=augmentation, model_arg=model, user=user)
-    elif model == "unet_liver":
-        unet_liver(logger=logger, unique_id=unique_id, augmentation=augmentation, model_arg=model)
-    elif model == "unet_pancreas":
-        unet_pancreas(logger=logger, unique_id=unique_id, augmentation=augmentation, model_arg=model)
+    elif model == "unet_liver" or model == "unetr_liver":
+        liver_segmentation(logger=logger, unique_id=unique_id, augmentation=augmentation, model_arg=model, user=user)
+    elif model == "unet_pancreas" or model == "unetr_pancreas":
+        pancreas_segmentation(logger=logger, unique_id=unique_id, augmentation=augmentation, model_arg=model, user=user)
     else:
         logger.error("Invalid model selected")
         sys.exit(1)

@@ -25,8 +25,9 @@ rsync -av \
   --exclude='emissions.csv' \
   --exclude='notebooks' \
   --exclude='outputs' \
-  --exclude='models/__pycache__' \
+  --exclude='seg_models/__pycache__' \
   --exclude='helpers/__pycache__' \
+  --exclude='images/' \
   --exclude='.git' \
   /cluster/home/$USER/code/tdt17-visuell-intelligens/ $CODE_PATH
 

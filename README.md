@@ -1,39 +1,13 @@
-# Direction 
+# Spleen, liver and pancreas segmentation using MSD challenge dataset
 
-- Goal: Sementation on two organs and two models using the Decathlon datasets.
+To run this code you need to be on the cluster IDUN at NTNU and clone this repository. 
+You can change the arguments in the train.sh file to run the different tasks. 
 
-Organs to segment: 
-[X] Spleen on UNET 
-[X] Pancreas on UNET 
-[X] Liver on UNET 
+```
+./train.sh
+```
 
-What to look further into:  
-[ ] Hyperparamter tuning  
-[ ] Data augmentation 
-
-## TODOs:
-
-Today: 
-
-[X] Forstå oss på fastmonai koden mer B) 
-[X] Se bildene som lagres, finne ut hvordan vi kan lagre og se de 
-[ ] Finne ut hva vi skal se på: Data augmentations og andre modeller!!!
-[ ] Data analysis 
-
-Future:
-[ ] Make video/explain the results 
-[ ] Report 
-
-## Report from Frank 
-
-1. Data analysis!! 
-2. Explain stuff you are doing :)) 
-3. Discuss the results
-4. Make video/explain the results
-
-Fra Frank: Skal mye til å få lavere enn 40%, så lenge vi har vist at vi har prøvd og gjort det vi skal (3 tasks) og forklarer det vi har gjort ordentlig, ikke bare fått det til å kjøre:,)
-
-## Overview of taks
+## Overview of tasks
 
 ![MSD tasks](https://media.springernature.com/full/springer-static/image/art%3A10.1038%2Fs41467-022-30695-9/MediaObjects/41467_2022_30695_Fig1_HTML.png)
 
