@@ -41,7 +41,6 @@ def liver_segmentation(logger, model_arg, user, unique_id=0, augmentation="basel
 
   item_tfms = get_transforms(logger, augmentation=augmentation, size=size)
 
-  #item_tfms = [ZNormalization(), PadOrCrop(size)] #, RandomAffine(degrees=15, translation=15) , RandomGamma() , RandomNoise()
   dblock = MedDataBlock(blocks=(ImageBlock(cls=MedImage), MedMaskBlock), splitter=RandomSplitter(seed=42), get_x=ColReader('image'), get_y=ColReader('label'), item_tfms=item_tfms,reorder=reorder,resample=resample)
   dls = dblock.dataloaders(train_df, bs=bs)
   logger.info(f'len traing:  {len(dls.train_ds.items)}   len val: {len(dls.valid_ds.items)}')
