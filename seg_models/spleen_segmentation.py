@@ -1,10 +1,11 @@
 import matplotlib.pyplot as plt
-from fastMONAI.vision_all import med_img_reader, MedDataset, MedMask, PadOrCrop, RandomAffine, RandomNoise, RandomGamma, MedMaskBlock, MedImage, RandomSplitter, ColReader, ImageBlock, ZNormalization, MedDataBlock, CustomLoss, multi_dice_score, ranger, Learner, store_variables
+from fastMONAI.vision_all import med_img_reader, MedDataset, MedMask, MedMaskBlock, MedImage, RandomSplitter, ColReader, ImageBlock, ZNormalization, MedDataBlock, CustomLoss, multi_dice_score, ranger, Learner, store_variables
 from sklearn.model_selection import train_test_split
 from monai.apps import DecathlonDataset
 from pandas import DataFrame
 import numpy as np
 from helpers.create_dir import create_directory_if_not_exists
+from helpers.get_transforms import get_transforms
 from monai.losses import DiceCELoss
 from monai.networks.nets import (
     UNet,
@@ -34,20 +35,8 @@ def spleen_segmentation(logger, model_arg, user, unique_id=0, augmentation="none
     med_dataset = MedDataset(img_list=train_df.label.tolist(), dtype=MedMask, max_workers=12)
     resample, reorder = med_dataset.suggestion()
 
-    logger.info('Adding augmentations')
-    random_affine = RandomAffine(degrees=15, translation=15)
-    random_gamma = RandomGamma()
-    random_noise = RandomNoise()
-    item_tfms = [ZNormalization(), PadOrCrop(size)]
-
-    if augmentation == 'rand_affine':
-        item_tfms.append(random_affine)
-    elif augmentation == 'rand_gamma':
-        item_tfms.append(random_gamma)
-    elif augmentation == 'rand_noise':
-        item_tfms.append(random_noise)
-    else:
-        pass
+    item_tfms = get_transforms(logger, augmentation=augmentation, size=size)
+    
     logger.info(f'Added these augmentations: {item_tfms}')
     dblock = MedDataBlock(
         blocks=(ImageBlock(cls=MedImage), MedMaskBlock), 
