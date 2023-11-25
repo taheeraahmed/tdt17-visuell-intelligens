@@ -38,7 +38,7 @@ def run_models(model, version, logger, job_id):
         unet_spleen(logger=logger, job_id=job_id, version=version)
     elif model == "unet_liver":
         logger.info(f'Running unet_liver {version}')
-        unet_liver(logger=logger)
+        unet_liver(logger=logger, version=version)
     elif model == "unet_pancreas":
         logger.info(f"Running unet_pancreas {version}")
         unet_pancreas(logger=logger, version=version)
