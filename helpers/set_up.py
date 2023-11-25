@@ -3,12 +3,12 @@ import logging
 import os
 from datetime import datetime
 from helpers.create_dir import create_directory_if_not_exists
+import torch
 
 def set_up(model, unique_id, augmentations):
     result = pyfiglet.figlet_format("VI babes", font = "slant") 
     print(result) 
     project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-    
     LOG_DIR = "/cluster/home/taheeraa/runs/logs"
     create_directory_if_not_exists(LOG_DIR)
     now = datetime.now()
@@ -22,5 +22,7 @@ def set_up(model, unique_id, augmentations):
                     logging.StreamHandler()
                 ])
     logger = logging.getLogger()
+    logger.info('Emptied cache')
+    torch.cuda.empty_cache()
     logger.info('Set-up done')
     return logger, project_root
