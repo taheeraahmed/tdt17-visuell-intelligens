@@ -22,6 +22,6 @@ module load Python/3.10.8-GCCcore-12.2.0
 
 pip install -q -r requirements.txt
 
-python train.py -id $SLURM_JOB_ID -m "unet_pancreas" -v "no_augmentaion"
+python train.py -id $SLURM_JOB_ID -m "unet_pancreas" -a "baseline"
 
 echo "Done running train.py"

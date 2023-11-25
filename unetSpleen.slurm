@@ -5,8 +5,6 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --mem=30G
-#SBATCH --job-name="tdt017-franky-boi-give-us-a-rand-affine"
-#SBATCH --output=idun/22-11-21-15-11-rand-affine.out
 #SBATCH --gres=gpu:1
 
 echo "We are running from this directory: $SLURM_SUBMIT_DIR"
@@ -21,8 +19,11 @@ echo "Total of $SLURM_NTASKS cores"
 echo "--- nvidia-smi ---"
 nvidia-smi
 module load Python/3.10.8-GCCcore-12.2.0
-source .venv/bin/activate
 pip install -q -r requirements.txt
+
 echo "--- Running python-script ---"
-python train.py -id $SLURM_JOB_ID -m "unet_spleen" -v "no_augmentaion"
+echo "Running python script with Model: $MODEL and Augmentation: $AUGMENTATION"
+echo "Path to code: $CODE_PATH"
+python $CODE_PATH/train.py -id $AUGMENTATION-$UNIQUE_ID -m $MODEL -a $AUGMENTATION -u $USER
+
 echo " --- Done running train.py ---"
