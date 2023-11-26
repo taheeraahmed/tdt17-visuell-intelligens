@@ -13,7 +13,8 @@ This script is designed for submitting a job to a SLURM-based cluster for medica
 ## 🛠️ Usage
 1. **Set Parameters:**
    - `AUGMENTATION`: Choose the type of augmentation (`baseline`, `rand_affine`, `rand_noise`, `rand_gamma`) 🎛️.
-   - `MODEL`: Select the model (`unet_spleen`, `unet_liver`, `unet_pancreas`, `unetr_spleen`) 🧬.
+   - `MODEL`: Select the model (`unet`, `unetr`) 🧬.
+   - `ORGAN`: Select the model (`liver`, `pancreas`, `spleen`) 🧬.
 
 2. **Run the Script:**
    - Execute the script in a Bash environment: `./train.sh`.
