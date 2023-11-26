@@ -6,7 +6,7 @@ import argparse
 from codecarbon import EmissionsTracker
 import time 
 
-ORGAN = {
+ORGAN_TASK = {
     'spleen': 'Task09_Spleen',
     'liver': 'Task03_Liver',
     'pancreas': 'Task07_Pancreas'
@@ -17,7 +17,7 @@ def main(args):
     model = args.model
     augmentation = args.augmentation
     user = args.user
-    organ_task = ORGAN[args.organ]
+    organ_task = ORGAN_TASK[args.organ]
     organ = args.organ
 
     logger, project_root = set_up(model=model, unique_id=unique_id, augmentations=augmentation)
