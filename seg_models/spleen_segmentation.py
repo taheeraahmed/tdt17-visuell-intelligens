@@ -16,7 +16,7 @@ import sys
 def spleen_segmentation(logger, model_arg, user, unique_id=0, augmentation="baseline"):
     bs = 1
     size=[512, 512, 128]
-    epochs = 20
+    epochs = 100
     logger.info(f'batch size: {bs}, size: {size}, epochs: {epochs}')
     path = f'/cluster/home/{user}/runs/output/{unique_id}'
     create_directory_if_not_exists(path)
