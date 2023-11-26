@@ -43,4 +43,4 @@ sbatch --partition=GPUQ \
   --job-name=$JOB_NAME \
   --output=$OUTPUT_FILE \
   --export=UNIQUE_ID=$UNIQUE_ID,AUGMENTATION=$AUGMENTATION,MODEL=$MODEL,CODE_PATH=$CODE_PATH,USER=$USER \
-  $CODE_PATH/unetSpleen.slurm
+  $CODE_PATH/train.slurm
