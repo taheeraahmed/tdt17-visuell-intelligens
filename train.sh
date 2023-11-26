@@ -1,17 +1,20 @@
 #!/bin/bash
 
 # Generate a unique identifier
-UNIQUE_ID=$(date +%Y%m%d-%H%M%S)
-AUGMENTATION="baseline"  # "rand_affine", "rand_noise", "rand_gamma", "baseline"
-MODEL="unetr_spleen"     # "unet_spleen", "unet_liver", "unet_pancreas", 'unetr_spleen'
+DATE=$(date +%Y%m%d-%H%M%S)
+AUGMENTATION="baseline" # "rand_affine", "rand_noise", "rand_gamma", "baseline"
+MODEL="unetr"           # "unet", "unetr"
+ORGAN="spleen"          # "spleen", "liver", "pancreas"
 USER=$(whoami)
 echo "Current user is: $USER"
 
-JOB_NAME="${AUGMENTATION}-${MODEL}-${UNIQUE_ID}"
-OUTPUT_FILE="/cluster/home/taheeraa/runs/idun_out/${AUGMENTATION}-${MODEL}-${UNIQUE_ID}.out"
+ID="${AUGMENTATION}-${ORGAN}-${MODEL}-${DATE}"
+
+JOB_NAME=$ID
+OUTPUT_FILE="/cluster/home/taheeraa/runs/idun_out/${ID}.out"
 
 # Define the destination path for the code
-CODE_PATH="/cluster/home/$USER/runs/code/$AUGMENTATION-$MODEL-$UNIQUE_ID"
+CODE_PATH="/cluster/home/$USER/runs/code/${ID}"
 
 # Copy the code with rsync, excluding .venv
 echo "Copying code to $CODE_PATH"
@@ -35,12 +38,12 @@ rsync -av \
 echo "Running slurm job from $CODE_PATH"
 sbatch --partition=GPUQ \
   --account=ie-idi \
-  --time=20:00:00 \
+  --time=00:15:00 \
   --nodes=1 \
   --ntasks-per-node=1 \
   --mem=50G \
   --gres=gpu:1 \
   --job-name=$JOB_NAME \
   --output=$OUTPUT_FILE \
-  --export=UNIQUE_ID=$UNIQUE_ID,AUGMENTATION=$AUGMENTATION,MODEL=$MODEL,CODE_PATH=$CODE_PATH,USER=$USER \
+  --export=DATE=$DATE,AUGMENTATION=$AUGMENTATION,MODEL=$MODEL,CODE_PATH=$CODE_PATH,USER=$USER,ORGAN=$ORGAN \
   $CODE_PATH/train.slurm

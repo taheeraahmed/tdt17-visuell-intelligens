@@ -13,24 +13,36 @@ from monai.networks.nets import (
 )
 import sys
 
-def spleen_segmentation(logger, model_arg, user, unique_id=0, augmentation="baseline"):
+def segmentation_model(logger, model_arg, user, task, unique_id=0, augmentation="baseline"):
     bs = 1
     size=[512, 512, 128]
     epochs = 100
     logger.info(f'batch size: {bs}, size: {size}, epochs: {epochs}')
     path = f'/cluster/home/{user}/runs/output/{unique_id}'
     create_directory_if_not_exists(path)
-    task = 'Task09_Spleen'
 
     logger.info(f'Augmentation {augmentation}')
     logger.info('Loading data..')
-    data_path = '/cluster/projects/vc/data/mic/open/MSD'                               #IDUN
+    data_path = '/cluster/projects/vc/data/mic/open/MSD'
     training_data = DecathlonDataset(root_dir=data_path, task=task, section="training", download=False, cache_num=0, num_workers=3)
 
     df = DataFrame(training_data.data)
     train_df, test_df = train_test_split(df, test_size=0.1, random_state=42)
     codes = np.unique(med_img_reader(train_df.label.tolist()[0]))
     n_classes = len(codes)
+
+    if model_arg == 'unetr':
+        model = UNETR(spatial_dims=3, in_channels=1, out_channels=n_classes, img_size=size)
+        total_params = sum(p.numel() for p in model.parameters())
+        logger.info(f"Total number of parameters in UNETR: {total_params}")
+        
+    elif model_arg=="unet":
+        model = UNet(spatial_dims=3, in_channels=1, out_channels=n_classes, channels=(16, 32, 64, 128, 256),strides=(2, 2, 2, 2), num_res_units=2)
+        total_params = sum(p.numel() for p in model.parameters())
+        logger.info(f"Total number of parameters in U-Net: {total_params}")
+    else:
+        logger.error('Invalid model')
+        sys.exit(1)
 
     med_dataset = MedDataset(img_list=train_df.label.tolist(), dtype=MedMask, max_workers=12)
     resample, reorder = med_dataset.suggestion()
@@ -53,11 +65,6 @@ def spleen_segmentation(logger, model_arg, user, unique_id=0, augmentation="base
     logger.info(f'Show batches figure has been stored at path: {path}/task09-dls.png')
     logger.info('Data is loaded..')
 
-    if model_arg == 'unetr_spleen':
-        model = UNETR(spatial_dims=3, in_channels=1, out_channels=n_classes, img_size=size)
-    elif model_arg=="unet_spleen":
-        model = UNet(spatial_dims=3, in_channels=1, out_channels=n_classes, channels=(16, 32, 64, 128, 256),strides=(2, 2, 2, 2), num_res_units=2)
-    
     loss_func = CustomLoss(loss_func=DiceCELoss(to_onehot_y=True, include_background=True, softmax=True))
 
     logger.info('Running learner and lr_find')
@@ -94,5 +101,4 @@ def spleen_segmentation(logger, model_arg, user, unique_id=0, augmentation="base
     store_variables(pkl_fn=f'{path}/vars.pkl', size=size, reorder=reorder, resample=resample)
     logger.info(f'Exported vars file: {path}/vars.pkl')
     learn.export(f'{path}/model.pkl')
-
-    logger.info(f'Exported pickle file: {path}/model.pkl')
+    logger.info(f'Exported model: {path}/model.pkl')

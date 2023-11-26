@@ -14,8 +14,8 @@ module load Python/3.10.8-GCCcore-12.2.0
 pip install -q -r requirements.txt
 
 echo "--- Running python-script ---"
-echo "Running python script with Model: $MODEL and Augmentation: $AUGMENTATION"
+echo "Running python script with Model: $MODEL, augmentation: $AUGMENTATION" and organ: $ORGAN
 echo "Path to code: $CODE_PATH"
-python $CODE_PATH/train.py -id $AUGMENTATION-$UNIQUE_ID -m $MODEL -a $AUGMENTATION -u $USER
+python $CODE_PATH/train.py -id $AUGMENTATION-$DATE -m $MODEL -a $AUGMENTATION -u $USER -o $ORGAN
 
 echo " --- Done running train.py ---"
