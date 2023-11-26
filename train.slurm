@@ -1,12 +1,4 @@
 #!/bin/sh
-#SBATCH --partition=GPUQ
-#SBATCH --account=ie-idi
-#SBATCH --time=20:00:00
-#SBATCH --nodes=1
-#SBATCH --ntasks-per-node=1
-#SBATCH --mem=30G
-#SBATCH --gres=gpu:1
-
 echo "We are running from this directory: $SLURM_SUBMIT_DIR"
 echo "The name of the job is: $SLURM_JOB_NAME"
 echo "Th job ID is $SLURM_JOB_ID"
