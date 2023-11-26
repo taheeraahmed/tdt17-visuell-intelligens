@@ -46,10 +46,9 @@ def segmentation_model(logger, model_arg, user, task, unique_id=0, augmentation=
 
     med_dataset = MedDataset(img_list=train_df.label.tolist(), dtype=MedMask, max_workers=12)
     resample, reorder = med_dataset.suggestion()
-
     item_tfms = get_transforms(logger, augmentation=augmentation, size=size)
-    
     logger.info(f'Added these augmentations: {item_tfms}')
+
     dblock = MedDataBlock(
         blocks=(ImageBlock(cls=MedImage), MedMaskBlock), 
         splitter=RandomSplitter(seed=42), 

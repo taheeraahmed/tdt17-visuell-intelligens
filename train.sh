@@ -11,7 +11,7 @@ echo "Current user is: $USER"
 ID="${AUGMENTATION}-${ORGAN}-${MODEL}-${DATE}"
 
 JOB_NAME=$ID
-OUTPUT_FILE="/cluster/home/taheeraa/runs/idun_out/${ID}.out"
+OUTPUT_FILE="/cluster/home/$USER/runs/idun_out/${ID}.out"
 
 # Define the destination path for the code
 CODE_PATH="/cluster/home/$USER/runs/code/${ID}"
